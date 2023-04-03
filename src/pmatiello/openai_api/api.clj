@@ -1,5 +1,5 @@
-(ns openai-clj.api
-  (:require [openai-clj.internal.http :as http]))
+(ns pmatiello.openai-api.api
+  (:require [pmatiello.openai-api.internal.http :as http]))
 
 (defn credentials
   ([api-key]

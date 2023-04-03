@@ -1,8 +1,8 @@
-(ns openai-clj.internal.http-test
+(ns pmatiello.openai-api.internal.http-test
   (:require [clj-http.client :as client]
             [clojure.test :refer :all]
             [mockfn.clj-test :as mfn]
-            [openai-clj.internal.http :as http]))
+            [pmatiello.openai-api.internal.http :as http]))
 
 (mfn/deftest get!-test
   (mfn/testing "makes get request to endpoint and returns the response body"

@@ -1,8 +1,8 @@
-(ns openai-clj.api-test
+(ns pmatiello.openai-api.api-test
   (:require [clojure.test :refer :all]
             [mockfn.clj-test :as mfn]
-            [openai-clj.api :as api]
-            [openai-clj.internal.http :as http]))
+            [pmatiello.openai-api.api :as api]
+            [pmatiello.openai-api.internal.http :as http]))
 
 (mfn/deftest credentials-test
   (mfn/testing "returns credentials for API key"
