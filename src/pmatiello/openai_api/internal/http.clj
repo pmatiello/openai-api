@@ -21,3 +21,11 @@
   (let [headers  (credentials->headers credentials)
         response (client/get endpoint {:headers headers})]
     (json/read-str (:body response) {:key-fn key-fn})))
+
+(defn post! [endpoint body credentials]
+  (let [headers   (credentials->headers credentials)
+        body-json (json/write-str body)
+        response  (client/post endpoint {:headers      headers
+                                         :content-type :json
+                                         :body         body-json})]
+    (json/read-str (:body response) {:key-fn key-fn})))

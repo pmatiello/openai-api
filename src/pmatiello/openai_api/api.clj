@@ -17,3 +17,9 @@
   [model credentials]
   (http/get! (str "https://api.openai.com/v1/models/" (name model))
              credentials))
+
+(defn completion
+  [model params credentials]
+  (let [body (merge {:model (name model)} params)]
+    (http/post! "https://api.openai.com/v1/completions"
+                body credentials)))

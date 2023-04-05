@@ -25,3 +25,11 @@
     (is (= 'response (api/model :teapot 'credentials)))
     (mfn/providing
       (http/get! "https://api.openai.com/v1/models/teapot" 'credentials) 'response)))
+
+
+(deftest completion-test
+  (mfn/testing "retrieves completion"
+    (is (= 'response (api/completion :chamomile {:k :v} 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/completions"
+                  {:model "chamomile" :k :v} 'credentials) 'response)))
