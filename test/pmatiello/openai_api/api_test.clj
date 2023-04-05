@@ -29,7 +29,7 @@
 
 (deftest completion-test
   (mfn/testing "retrieves completion"
-    (is (= 'response (api/completion :chamomile {:k :v} 'credentials)))
+    (is (= 'response (api/completion {:model :chamomile :k :v} 'credentials)))
     (mfn/providing
       (http/post! "https://api.openai.com/v1/completions"
-                  {:model "chamomile" :k :v} 'credentials) 'response)))
+                  {:model :chamomile :k :v} 'credentials) 'response)))

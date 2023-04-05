@@ -1,7 +1,14 @@
 (ns pmatiello.openai-api.internal.http
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
-            [clojure.string :as str]))
+            [clojure.spec.alpha :as s]
+            [clojure.string :as str]
+            [pmatiello.openai-api.internal.common :as common]))
+
+(s/def ::http-headers map?)
+(s/def ::endpoint string?)
+(s/def ::api-response map?)
+(s/def ::http-body map?)
 
 (defn ^:private credentials->headers
   [{:keys [api-key org-id]}]
@@ -9,6 +16,10 @@
     {"Authorization"       (str "Bearer " api-key)
      "OpenAI-Organization" org-id}
     {"Authorization" (str "Bearer " api-key)}))
+
+(s/fdef credentials->headers
+  :args (s/cat :credentials ::common/credentials)
+  :ret ::http-headers)
 
 (defn ^:private key-fn
   [orig-key]
@@ -22,6 +33,10 @@
         response (client/get endpoint {:headers headers})]
     (json/read-str (:body response) {:key-fn key-fn})))
 
+(s/fdef get!
+  :args (s/cat :endpoint ::endpoint :credentials ::common/credentials)
+  :ret ::api-response)
+
 (defn post! [endpoint body credentials]
   (let [headers   (credentials->headers credentials)
         body-json (json/write-str body)
@@ -29,3 +44,7 @@
                                          :content-type :json
                                          :body         body-json})]
     (json/read-str (:body response) {:key-fn key-fn})))
+
+(s/fdef post!
+  :args (s/cat :endpoint ::endpoint :body ::http-body :credentials ::common/credentials)
+  :ret ::api-response)
