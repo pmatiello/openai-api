@@ -6,6 +6,8 @@
 (s/def ::model keyword?)
 (s/def ::completion-params
   (s/keys :req-un [::model]))
+(s/def ::chat-params
+  (s/keys :req-un [::model]))
 
 (defn credentials
   ([api-key]
@@ -41,3 +43,11 @@
 
 (s/fdef completion
   :args (s/cat :params ::completion-params :credentials ::common/credentials))
+
+(defn chat
+  [params credentials]
+  (http/post! "https://api.openai.com/v1/chat/completions"
+              params credentials))
+
+(s/fdef chat
+  :args (s/cat :params ::chat-params :credentials ::common/credentials))

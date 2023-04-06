@@ -33,3 +33,10 @@
     (mfn/providing
       (http/post! "https://api.openai.com/v1/completions"
                   {:model :chamomile :k :v} 'credentials) 'response)))
+
+(deftest chat-test
+  (mfn/testing "retrieves completion"
+    (is (= 'response (api/chat {:model :earl-grey :k :v} 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/chat/completions"
+                  {:model :earl-grey :k :v} 'credentials) 'response)))
