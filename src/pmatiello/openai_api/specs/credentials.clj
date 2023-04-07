@@ -1,4 +1,4 @@
-(ns pmatiello.openai-api.internal.common
+(ns pmatiello.openai-api.specs.credentials
   (:require [clojure.spec.alpha :as s]))
 
 (s/def ::api-key string?)

@@ -1,13 +1,10 @@
 (ns pmatiello.openai-api.api
   (:require [clojure.spec.alpha :as s]
-            [pmatiello.openai-api.internal.common :as common]
-            [pmatiello.openai-api.internal.http :as http]))
-
-(s/def ::model keyword?)
-(s/def ::completion-params
-  (s/keys :req-un [::model]))
-(s/def ::chat-params
-  (s/keys :req-un [::model]))
+            [pmatiello.openai-api.internal.http :as http]
+            [pmatiello.openai-api.specs.chat :as specs.chat]
+            [pmatiello.openai-api.specs.completion :as specs.completion]
+            [pmatiello.openai-api.specs.credentials :as specs.credentials]
+            [pmatiello.openai-api.specs.model :as specs.model]))
 
 (defn credentials
   ([api-key]
@@ -17,8 +14,9 @@
     :org-id  org-id}))
 
 (s/fdef credentials
-  :args (s/cat :api-key ::common/api-key :org-id (s/? ::common/org-id))
-  :ret ::common/credentials)
+  :args (s/cat :api-key ::specs.credentials/api-key
+               :org-id (s/? ::specs.credentials/org-id))
+  :ret ::specs.credentials/credentials)
 
 (defn models
   [credentials]
@@ -26,7 +24,8 @@
              credentials))
 
 (s/fdef models
-  :args (s/cat :credentials ::common/credentials))
+  :args (s/cat :credentials ::specs.credentials/credentials)
+  :ret ::specs.model/result-list)
 
 (defn model
   [model credentials]
@@ -34,7 +33,9 @@
              credentials))
 
 (s/fdef model
-  :args (s/cat :model ::model :credentials ::common/credentials))
+  :args (s/cat :model ::specs.model/model
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.model/result)
 
 (defn completion
   [params credentials]
@@ -42,7 +43,9 @@
               params credentials))
 
 (s/fdef completion
-  :args (s/cat :params ::completion-params :credentials ::common/credentials))
+  :args (s/cat :params ::specs.completion/params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.completion/result)
 
 (defn chat
   [params credentials]
@@ -50,4 +53,6 @@
               params credentials))
 
 (s/fdef chat
-  :args (s/cat :params ::chat-params :credentials ::common/credentials))
+  :args (s/cat :params ::specs.chat/params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.chat/result)
