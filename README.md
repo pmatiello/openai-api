@@ -9,8 +9,15 @@ OpenAI in any way.
 
 ### Running tests
 
-The following command will execute the test suite and report the results:
+The following command will execute the unit tests:
 
 ```
 % clj -X:test
+```
+
+The following commands will execute the integration tests:
+
+```
+% export OPENAI_API_KEY="<OpenAI API key>"
+% clj -X:test :patterns '["pmatiello.openai-api.integration-tests"]'
 ```
