@@ -4,6 +4,7 @@
             [pmatiello.openai-api.specs.chat :as specs.chat]
             [pmatiello.openai-api.specs.completion :as specs.completion]
             [pmatiello.openai-api.specs.credentials :as specs.credentials]
+            [pmatiello.openai-api.specs.edits :as specs.edits]
             [pmatiello.openai-api.specs.model :as specs.model]))
 
 (defn credentials
@@ -56,3 +57,13 @@
   :args (s/cat :params ::specs.chat/params
                :credentials ::specs.credentials/credentials)
   :ret ::specs.chat/result)
+
+(defn edits
+  [params credentials]
+  (http/post! "https://api.openai.com/v1/edits"
+              params credentials))
+
+(s/fdef edits
+  :args (s/cat :params ::specs.edits/params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.edits/result)

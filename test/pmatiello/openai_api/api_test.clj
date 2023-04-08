@@ -40,3 +40,10 @@
     (mfn/providing
       (http/post! "https://api.openai.com/v1/chat/completions"
                   'params 'credentials) 'response)))
+
+(deftest edits-test
+  (mfn/testing "retrieves edits"
+    (is (= 'response (api/edits 'params 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/edits"
+                  'params 'credentials) 'response)))
