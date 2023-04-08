@@ -34,9 +34,9 @@
                            :messages [{:role "user" :content "Hello!"}]}
                           credentials))))
 
-(deftest edits-test
-  (is (s/valid? :pmatiello.openai-api.specs.edits/result
-                (api/edits {:model       "code-davinci-edit-001"
+(deftest edit-test
+  (is (s/valid? :pmatiello.openai-api.specs.edit/result
+                (api/edit {:model        "code-davinci-edit-001"
                             :instruction "Fix."
                             :input       "(println \"hello)"}
-                           credentials))))
+                          credentials))))
