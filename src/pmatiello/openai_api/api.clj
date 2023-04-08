@@ -5,6 +5,7 @@
             [pmatiello.openai-api.specs.completion :as specs.completion]
             [pmatiello.openai-api.specs.credentials :as specs.credentials]
             [pmatiello.openai-api.specs.edit :as specs.edit]
+            [pmatiello.openai-api.specs.image :as specs.image]
             [pmatiello.openai-api.specs.model :as specs.model]))
 
 (defn credentials
@@ -67,3 +68,13 @@
   :args (s/cat :params ::specs.edit/params
                :credentials ::specs.credentials/credentials)
   :ret ::specs.edit/result)
+
+(defn image-generation
+  [params credentials]
+  (http/post! "https://api.openai.com/v1/images/generations"
+              params credentials))
+
+(s/fdef image-generation
+  :args (s/cat :params ::specs.image/generation-params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.image/result)

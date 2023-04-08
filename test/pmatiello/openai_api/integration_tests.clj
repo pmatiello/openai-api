@@ -36,7 +36,11 @@
 
 (deftest edit-test
   (is (s/valid? :pmatiello.openai-api.specs.edit/result
-                (api/edit {:model        "code-davinci-edit-001"
-                            :instruction "Fix."
-                            :input       "(println \"hello)"}
+                (api/edit {:model       "code-davinci-edit-001"
+                           :instruction "Fix."
+                           :input       "(println \"hello)"}
                           credentials))))
+
+(deftest image-generation-test
+  (is (s/valid? :pmatiello.openai-api.specs.image/result
+                (api/image-generation {:prompt "kitten"} credentials))))

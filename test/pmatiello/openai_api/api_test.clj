@@ -20,30 +20,37 @@
     (mfn/providing
       (http/get! "https://api.openai.com/v1/models" 'credentials) 'response)))
 
-(deftest model-test
+(mfn/deftest model-test
   (mfn/testing "retrieves the given model"
     (is (= 'response (api/model :teapot 'credentials)))
     (mfn/providing
       (http/get! "https://api.openai.com/v1/models/teapot" 'credentials) 'response)))
 
 
-(deftest completion-test
+(mfn/deftest completion-test
   (mfn/testing "retrieves completion"
     (is (= 'response (api/completion 'params 'credentials)))
     (mfn/providing
       (http/post! "https://api.openai.com/v1/completions"
                   'params 'credentials) 'response)))
 
-(deftest chat-test
+(mfn/deftest chat-test
   (mfn/testing "retrieves completion"
     (is (= 'response (api/chat 'params 'credentials)))
     (mfn/providing
       (http/post! "https://api.openai.com/v1/chat/completions"
                   'params 'credentials) 'response)))
 
-(deftest edit-test
+(mfn/deftest edit-test
   (mfn/testing "retrieves edit"
     (is (= 'response (api/edit 'params 'credentials)))
     (mfn/providing
       (http/post! "https://api.openai.com/v1/edits"
+                  'params 'credentials) 'response)))
+
+(mfn/deftest image-generation-test
+  (mfn/testing "retrieves a generated image"
+    (is (= 'response (api/image-generation 'params 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/images/generations"
                   'params 'credentials) 'response)))
