@@ -29,14 +29,14 @@
 
 (deftest completion-test
   (mfn/testing "retrieves completion"
-    (is (= 'response (api/completion {:model :chamomile :k :v} 'credentials)))
+    (is (= 'response (api/completion 'params 'credentials)))
     (mfn/providing
       (http/post! "https://api.openai.com/v1/completions"
-                  {:model :chamomile :k :v} 'credentials) 'response)))
+                  'params 'credentials) 'response)))
 
 (deftest chat-test
   (mfn/testing "retrieves completion"
-    (is (= 'response (api/chat {:model :earl-grey :k :v} 'credentials)))
+    (is (= 'response (api/chat 'params 'credentials)))
     (mfn/providing
       (http/post! "https://api.openai.com/v1/chat/completions"
-                  {:model :earl-grey :k :v} 'credentials) 'response)))
+                  'params 'credentials) 'response)))
