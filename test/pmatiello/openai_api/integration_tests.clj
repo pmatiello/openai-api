@@ -43,4 +43,5 @@
 
 (deftest image-generation-test
   (is (s/valid? :pmatiello.openai-api.specs.image/result
-                (api/image-generation {:prompt "kitten"} credentials))))
+                (api/image-generation {:prompt "kitten" :response-format "url"}
+                                      credentials))))

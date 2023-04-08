@@ -21,17 +21,23 @@
   :args (s/cat :credentials ::specs.credentials/credentials)
   :ret ::http-headers)
 
-(defn ^:private key-fn
+(defn ^:private json->clj-keys
   [orig-key]
   (-> orig-key
       (str/replace #"_" "-")
       keyword))
 
+(defn ^:private clj->json-keys
+  [orig-key]
+  (-> orig-key
+      name
+      (str/replace #"-" "_")))
+
 (defn get!
   [endpoint credentials]
   (let [headers  (credentials->headers credentials)
         response (client/get endpoint {:headers headers})]
-    (json/read-str (:body response) {:key-fn key-fn})))
+    (json/read-str (:body response) {:key-fn json->clj-keys})))
 
 (s/fdef get!
   :args (s/cat :endpoint ::endpoint
@@ -40,11 +46,11 @@
 
 (defn post! [endpoint body credentials]
   (let [headers   (credentials->headers credentials)
-        body-json (json/write-str body)
+        body-json (json/write-str body {:key-fn clj->json-keys})
         response  (client/post endpoint {:headers      headers
                                          :content-type :json
                                          :body         body-json})]
-    (json/read-str (:body response) {:key-fn key-fn})))
+    (json/read-str (:body response) {:key-fn json->clj-keys})))
 
 (s/fdef post!
   :args (s/cat :endpoint ::endpoint
