@@ -1,5 +1,8 @@
 (ns pmatiello.openai-api.specs.image
-  (:require [clojure.spec.alpha :as s]))
+  (:require [clojure.spec.alpha :as s])
+  (:import (java.io File)))
+
+(s/def ::prompt string?)
 
 (s/def ::n integer?)
 (s/def ::response-format #{"url" "b64_json"})
@@ -9,6 +12,14 @@
 (s/def ::generation-params
   (s/keys :req-un [::prompt]
           :opt-un [::n ::response-format ::size ::user]))
+
+(s/def ::file #(instance? File %))
+(s/def ::image ::file)
+(s/def ::mask ::file)
+
+(s/def ::edit-params
+  (s/keys :req-un [::image ::prompt]
+          :opt-un [::mask ::n ::response-format ::user]))
 
 (s/def ::created integer?)
 

@@ -42,7 +42,7 @@
 (defn completion
   [params credentials]
   (http/post! "https://api.openai.com/v1/completions"
-              params credentials))
+              {:body params} credentials))
 
 (s/fdef completion
   :args (s/cat :params ::specs.completion/params
@@ -52,7 +52,7 @@
 (defn chat
   [params credentials]
   (http/post! "https://api.openai.com/v1/chat/completions"
-              params credentials))
+              {:body params} credentials))
 
 (s/fdef chat
   :args (s/cat :params ::specs.chat/params
@@ -62,7 +62,7 @@
 (defn edit
   [params credentials]
   (http/post! "https://api.openai.com/v1/edits"
-              params credentials))
+              {:body params} credentials))
 
 (s/fdef edit
   :args (s/cat :params ::specs.edit/params
@@ -72,9 +72,19 @@
 (defn image-generation
   [params credentials]
   (http/post! "https://api.openai.com/v1/images/generations"
-              params credentials))
+              {:body params} credentials))
 
 (s/fdef image-generation
   :args (s/cat :params ::specs.image/generation-params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.image/result)
+
+(defn image-edit
+  [params credentials]
+  (http/post! "https://api.openai.com/v1/images/edits"
+              {:multipart params} credentials))
+
+(s/fdef image-edit
+  :args (s/cat :params ::specs.image/edit-params
                :credentials ::specs.credentials/credentials)
   :ret ::specs.image/result)

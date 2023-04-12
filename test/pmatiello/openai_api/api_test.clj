@@ -32,25 +32,32 @@
     (is (= 'response (api/completion 'params 'credentials)))
     (mfn/providing
       (http/post! "https://api.openai.com/v1/completions"
-                  'params 'credentials) 'response)))
+                  {:body 'params} 'credentials) 'response)))
 
 (mfn/deftest chat-test
   (mfn/testing "retrieves completion"
     (is (= 'response (api/chat 'params 'credentials)))
     (mfn/providing
       (http/post! "https://api.openai.com/v1/chat/completions"
-                  'params 'credentials) 'response)))
+                  {:body 'params} 'credentials) 'response)))
 
 (mfn/deftest edit-test
   (mfn/testing "retrieves edit"
     (is (= 'response (api/edit 'params 'credentials)))
     (mfn/providing
       (http/post! "https://api.openai.com/v1/edits"
-                  'params 'credentials) 'response)))
+                  {:body 'params} 'credentials) 'response)))
 
 (mfn/deftest image-generation-test
   (mfn/testing "retrieves a generated image"
     (is (= 'response (api/image-generation 'params 'credentials)))
     (mfn/providing
       (http/post! "https://api.openai.com/v1/images/generations"
-                  'params 'credentials) 'response)))
+                  {:body 'params} 'credentials) 'response)))
+
+(mfn/deftest image-edit-test
+  (mfn/testing "retrieves an edited image"
+    (is (= 'response (api/image-edit 'params 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/images/edits"
+                  {:multipart 'params} 'credentials) 'response)))

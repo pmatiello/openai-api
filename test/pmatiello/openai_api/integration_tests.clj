@@ -1,5 +1,6 @@
 (ns pmatiello.openai-api.integration-tests
-  (:require [clojure.spec.alpha :as s]
+  (:require [clojure.java.io :as io]
+            [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as stest]
             [clojure.test :refer :all]
             [pmatiello.openai-api.api :as api]))
@@ -45,3 +46,11 @@
   (is (s/valid? :pmatiello.openai-api.specs.image/result
                 (api/image-generation {:prompt "kitten" :response-format "url"}
                                       credentials))))
+
+(deftest image-edit-test
+  (is (s/valid? :pmatiello.openai-api.specs.image/result
+                (api/image-edit {:image           (io/file "test/fixtures/image.png")
+                                 :mask            (io/file "test/fixtures/mask.png")
+                                 :prompt          "brick wall with a graffiti"
+                                 :response-format "url"}
+                                credentials))))
