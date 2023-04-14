@@ -68,3 +68,10 @@
         :pmatiello.openai-api.specs.image/result
         (api/image-variation {:image (io/file "test/fixtures/image.png")}
                              credentials))))
+
+(deftest embedding-test
+  (is (s/valid?
+        :pmatiello.openai-api.specs.embedding/result
+        (api/embedding {:model "text-embedding-ada-002"
+                        :input "kittens napping."}
+                       credentials))))

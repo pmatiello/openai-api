@@ -68,3 +68,10 @@
     (mfn/providing
       (http/post! "https://api.openai.com/v1/images/variations"
                   {:multipart 'params} 'credentials) 'response)))
+
+(deftest embedding-test
+  (mfn/testing "retrieves embedding"
+    (is (= 'response (api/embedding 'params 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/embeddings"
+                  {:body 'params} 'credentials) 'response)))

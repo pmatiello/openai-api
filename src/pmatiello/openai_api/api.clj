@@ -5,6 +5,7 @@
             [pmatiello.openai-api.specs.completion :as specs.completion]
             [pmatiello.openai-api.specs.credentials :as specs.credentials]
             [pmatiello.openai-api.specs.edit :as specs.edit]
+            [pmatiello.openai-api.specs.embedding :as specs.embedding]
             [pmatiello.openai-api.specs.image :as specs.image]
             [pmatiello.openai-api.specs.model :as specs.model]))
 
@@ -98,3 +99,13 @@
   :args (s/cat :params ::specs.image/variation-params
                :credentials ::specs.credentials/credentials)
   :ret ::specs.image/result)
+
+(defn embedding
+  [params credentials]
+  (http/post! "https://api.openai.com/v1/embeddings"
+              {:body params} credentials))
+
+(s/fdef embedding
+  :args (s/cat :params ::specs.embedding/params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.embedding/result)
