@@ -75,3 +75,10 @@
     (mfn/providing
       (http/post! "https://api.openai.com/v1/embeddings"
                   {:body 'params} 'credentials) 'response)))
+
+(deftest audio-transcription-test
+  (mfn/testing "retrieves an audio transcription"
+    (is (= 'response (api/audio-transcription 'params 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/audio/transcriptions"
+                  {:multipart 'params} 'credentials) 'response)))

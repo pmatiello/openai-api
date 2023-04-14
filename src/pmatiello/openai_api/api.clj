@@ -1,6 +1,7 @@
 (ns pmatiello.openai-api.api
   (:require [clojure.spec.alpha :as s]
             [pmatiello.openai-api.internal.http :as http]
+            [pmatiello.openai-api.specs.audio :as specs.audio]
             [pmatiello.openai-api.specs.chat :as specs.chat]
             [pmatiello.openai-api.specs.completion :as specs.completion]
             [pmatiello.openai-api.specs.credentials :as specs.credentials]
@@ -109,3 +110,13 @@
   :args (s/cat :params ::specs.embedding/params
                :credentials ::specs.credentials/credentials)
   :ret ::specs.embedding/result)
+
+(defn audio-transcription
+  [params credentials]
+  (http/post! "https://api.openai.com/v1/audio/transcriptions"
+              {:multipart params} credentials))
+
+(s/fdef audio-transcription
+  :args (s/cat :params ::specs.audio/params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.audio/result)

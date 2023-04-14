@@ -75,3 +75,10 @@
         (api/embedding {:model "text-embedding-ada-002"
                         :input "kittens napping."}
                        credentials))))
+
+(deftest audio-transcription-test
+  (is (s/valid?
+        :pmatiello.openai-api.specs.audio/result
+        (api/audio-transcription {:model "whisper-1"
+                                  :file  (io/file "test/fixtures/audio.m4a")}
+                                 credentials))))
