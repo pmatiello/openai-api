@@ -14,43 +14,57 @@
   (api/credentials api-key))
 
 (deftest credentials-test
-  (is (s/valid? :pmatiello.openai-api.specs.credentials/credentials
-                (api/credentials api-key))))
+  (is (s/valid?
+        :pmatiello.openai-api.specs.credentials/credentials
+        (api/credentials api-key))))
 
 (deftest models-test
-  (is (s/valid? :pmatiello.openai-api.specs.model/result-list
-                (api/models credentials))))
+  (is (s/valid?
+        :pmatiello.openai-api.specs.model/result-list
+        (api/models credentials))))
 
 (deftest model-test
-  (is (s/valid? :pmatiello.openai-api.specs.model/result
-                (api/model :gpt-3.5-turbo credentials))))
+  (is (s/valid?
+        :pmatiello.openai-api.specs.model/result
+        (api/model :gpt-3.5-turbo credentials))))
 
 (deftest completion-test
-  (is (s/valid? :pmatiello.openai-api.specs.completion/result
-                (api/completion {:model "ada" :prompt "(println "} credentials))))
+  (is (s/valid?
+        :pmatiello.openai-api.specs.completion/result
+        (api/completion {:model "ada" :prompt "(println "} credentials))))
 
 (deftest chat-test
-  (is (s/valid? :pmatiello.openai-api.specs.chat/result
-                (api/chat {:model    "gpt-3.5-turbo"
-                           :messages [{:role "user" :content "Hello!"}]}
-                          credentials))))
+  (is (s/valid?
+        :pmatiello.openai-api.specs.chat/result
+        (api/chat {:model    "gpt-3.5-turbo"
+                   :messages [{:role "user" :content "Hello!"}]}
+                  credentials))))
 
 (deftest edit-test
-  (is (s/valid? :pmatiello.openai-api.specs.edit/result
-                (api/edit {:model       "code-davinci-edit-001"
-                           :instruction "Fix."
-                           :input       "(println \"hello)"}
-                          credentials))))
+  (is (s/valid?
+        :pmatiello.openai-api.specs.edit/result
+        (api/edit {:model       "code-davinci-edit-001"
+                   :instruction "Fix."
+                   :input       "(println \"hello)"}
+                  credentials))))
 
 (deftest image-generation-test
-  (is (s/valid? :pmatiello.openai-api.specs.image/result
-                (api/image-generation {:prompt "kitten" :response-format "url"}
-                                      credentials))))
+  (is (s/valid?
+        :pmatiello.openai-api.specs.image/result
+        (api/image-generation {:prompt "kitten" :response-format "url"}
+                              credentials))))
 
 (deftest image-edit-test
-  (is (s/valid? :pmatiello.openai-api.specs.image/result
-                (api/image-edit {:image           (io/file "test/fixtures/image.png")
-                                 :mask            (io/file "test/fixtures/mask.png")
-                                 :prompt          "brick wall with a graffiti"
-                                 :response-format "url"}
-                                credentials))))
+  (is (s/valid?
+        :pmatiello.openai-api.specs.image/result
+        (api/image-edit {:image           (io/file "test/fixtures/image.png")
+                         :mask            (io/file "test/fixtures/mask.png")
+                         :prompt          "brick wall with a graffiti"
+                         :response-format "url"}
+                        credentials))))
+
+(deftest image-variation-test
+  (is (s/valid?
+        :pmatiello.openai-api.specs.image/result
+        (api/image-variation {:image (io/file "test/fixtures/image.png")}
+                             credentials))))

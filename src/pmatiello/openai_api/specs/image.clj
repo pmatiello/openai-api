@@ -19,7 +19,11 @@
 
 (s/def ::edit-params
   (s/keys :req-un [::image ::prompt]
-          :opt-un [::mask ::n ::response-format ::user]))
+          :opt-un [::mask ::n ::response-format ::size ::user]))
+
+(s/def ::variation-params
+  (s/keys :req-un [::image]
+          :opt-un [::n ::response-format ::size ::user]))
 
 (s/def ::created integer?)
 

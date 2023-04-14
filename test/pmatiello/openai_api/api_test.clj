@@ -61,3 +61,10 @@
     (mfn/providing
       (http/post! "https://api.openai.com/v1/images/edits"
                   {:multipart 'params} 'credentials) 'response)))
+
+(deftest image-variation-test
+  (mfn/testing "retrieves an image variation"
+    (is (= 'response (api/image-variation 'params 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/images/variations"
+                  {:multipart 'params} 'credentials) 'response)))

@@ -88,3 +88,13 @@
   :args (s/cat :params ::specs.image/edit-params
                :credentials ::specs.credentials/credentials)
   :ret ::specs.image/result)
+
+(defn image-variation
+  [params credentials]
+  (http/post! "https://api.openai.com/v1/images/variations"
+              {:multipart params} credentials))
+
+(s/fdef image-variation
+  :args (s/cat :params ::specs.image/variation-params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.image/result)
