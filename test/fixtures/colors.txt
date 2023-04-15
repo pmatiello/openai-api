@@ -1,0 +1,6 @@
+  {"prompt": "Red", "completion": "#FF0000"}
+  {"prompt": "Blue", "completion": "#0000FF"}
+  {"prompt": "Yellow", "completion": "#FFFF00"}
+  {"prompt": "Orange", "completion": "#FFA500"}
+  {"prompt": "Green", "completion": "#008000"}
+  {"prompt": "Purple", "completion": "#800080"}

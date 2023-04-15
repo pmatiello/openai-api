@@ -7,6 +7,7 @@
             [pmatiello.openai-api.specs.credentials :as specs.credentials]
             [pmatiello.openai-api.specs.edit :as specs.edit]
             [pmatiello.openai-api.specs.embedding :as specs.embedding]
+            [pmatiello.openai-api.specs.file :as specs.file]
             [pmatiello.openai-api.specs.image :as specs.image]
             [pmatiello.openai-api.specs.model :as specs.model]))
 
@@ -130,3 +131,22 @@
   :args (s/cat :params ::specs.audio/translation-params
                :credentials ::specs.credentials/credentials)
   :ret ::specs.audio/result)
+
+(defn files
+  [credentials]
+  (http/get! "https://api.openai.com/v1/files"
+             credentials))
+
+(s/fdef files
+  :args (s/cat :credentials ::specs.credentials/credentials)
+  :ret ::specs.file/result-list)
+
+(defn file-upload
+  [params credentials]
+  (http/post! "https://api.openai.com/v1/files"
+              {:multipart params} credentials))
+
+(s/fdef file-upload
+  :args (s/cat :params ::specs.file/upload-params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.file/upload-result)

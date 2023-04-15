@@ -89,3 +89,16 @@
     (mfn/providing
       (http/post! "https://api.openai.com/v1/audio/translations"
                   {:multipart 'params} 'credentials) 'response)))
+
+(deftest files-test
+  (mfn/testing "retrieves list of files"
+    (is (= 'response (api/files 'credentials)))
+    (mfn/providing
+      (http/get! "https://api.openai.com/v1/files" 'credentials) 'response)))
+
+(deftest file-upload-test
+  (mfn/testing "uploads a file"
+    (is (= 'response (api/file-upload 'params 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/files"
+                  {:multipart 'params} 'credentials) 'response)))
