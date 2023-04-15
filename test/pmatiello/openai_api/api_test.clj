@@ -96,6 +96,19 @@
     (mfn/providing
       (http/get! "https://api.openai.com/v1/files" 'credentials) 'response)))
 
+(deftest file-test
+  (mfn/testing "retrieve file"
+    (is (= 'response (api/file 'id 'credentials)))
+    (mfn/providing
+      (http/get! "https://api.openai.com/v1/files/id" 'credentials) 'response)))
+
+(deftest file-content-test
+  (mfn/testing "retrieve file"
+    (is (= 'response (api/file-content 'id 'credentials)))
+    (mfn/providing
+      (http/get! "https://api.openai.com/v1/files/id/content"
+                 'credentials {:parse? false}) 'response)))
+
 (deftest file-upload!-test
   (mfn/testing "uploads a file"
     (is (= 'response (api/file-upload! 'params 'credentials)))

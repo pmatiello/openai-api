@@ -141,6 +141,26 @@
   :args (s/cat :credentials ::specs.credentials/credentials)
   :ret ::specs.file/result-list)
 
+(defn file
+  [id credentials]
+  (http/get! (str "https://api.openai.com/v1/files/" id)
+             credentials))
+
+(s/fdef file
+  :args (s/cat :id ::specs.file/id
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.file/result)
+
+(defn file-content
+  [id credentials]
+  (http/get! (str "https://api.openai.com/v1/files/" id "/content")
+             credentials {:parse? false}))
+
+(s/fdef file-content
+  :args (s/cat :id ::specs.file/id
+               :credentials ::specs.credentials/credentials)
+  :ret string?)
+
 (defn file-upload!
   [params credentials]
   (http/post! "https://api.openai.com/v1/files"

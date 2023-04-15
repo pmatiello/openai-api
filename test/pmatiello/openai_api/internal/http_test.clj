@@ -29,7 +29,13 @@
     (is (= {:abc-xyz "ok"} (http/get! 'endpoint credentials)))
     (mfn/providing
       (client/get 'endpoint {:headers {"Authorization" "Bearer api-key"}})
-      {:status 200 :body "{\"abc_xyz\":\"ok\"}"})))
+      {:status 200 :body "{\"abc_xyz\":\"ok\"}"}))
+
+  (mfn/testing "returns unparsed results when options include {:parse? false}"
+    (is (= "raw body" (http/get! 'endpoint credentials {:parse? false})))
+    (mfn/providing
+      (client/get 'endpoint {:headers {"Authorization" "Bearer api-key"}})
+      {:status 200 :body "raw body"})))
 
 (mfn/deftest post!-test
   (mfn/testing "single part requests"

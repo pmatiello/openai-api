@@ -18,14 +18,18 @@
 (s/def ::result-list
   (s/keys :req-un [::data ::object]))
 
+(s/def ::status string?)
+(s/def ::status-details any?)
+
+(s/def ::result
+  (s/keys :req-un [::bytes ::created-at ::filename ::id ::object ::purpose
+                   ::status ::status-details]))
+
 (s/def ::file #(instance? File %))
 (s/def ::purpose string?)
 
 (s/def ::upload-params
   (s/keys :req-un [::file ::purpose]))
-
-(s/def ::status string?)
-(s/def ::status-details any?)
 
 (s/def ::upload-result
   (s/keys :req-un [::bytes ::created-at ::filename ::id ::object ::purpose

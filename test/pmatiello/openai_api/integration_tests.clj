@@ -103,6 +103,21 @@
           :pmatiello.openai-api.specs.file/result-list
           (api/files credentials))))
 
+  (while
+    (->> credentials api/files :data (map :status) (every? #{"processed"}) not)
+    (Thread/sleep 1000))
+
+  (testing "file"
+    (is (s/valid?
+          :pmatiello.openai-api.specs.file/result
+          (api/file (-> credentials api/files :data first :id) credentials))))
+
+  (testing "file-content"
+    (is (s/valid?
+          string?
+          (api/file-content (-> credentials api/files :data first :id)
+                            credentials))))
+
   (testing "file-delete!"
     (is (s/valid?
           :pmatiello.openai-api.specs.file/delete-result

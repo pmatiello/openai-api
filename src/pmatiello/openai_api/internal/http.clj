@@ -6,10 +6,15 @@
             [pmatiello.openai-api.specs.credentials :as specs.credentials])
   (:import (java.io File)))
 
-(s/def ::api-response map?)
+(s/def ::api-response
+  (s/or :map map?
+        :string string?))
 (s/def ::endpoint string?)
 (s/def ::body map?)
 (s/def ::multipart map?)
+(s/def ::parse? boolean?)
+(s/def ::options
+  (s/keys* :opt-un [::parse?]))
 (s/def ::params
   (s/keys ::opt-un [::body ::multipart]))
 (s/def ::http-headers map?)
@@ -38,14 +43,19 @@
       (str/replace #"-" "_")))
 
 (defn get!
-  [endpoint credentials]
-  (let [headers  (credentials->headers credentials)
-        response (client/get endpoint {:headers headers})]
-    (json/read-str (:body response) {:key-fn json->clj-keys})))
+  [endpoint credentials & {:as options}]
+  (let [options  (merge {:parse? true} options)
+        headers  (credentials->headers credentials)
+        response (client/get endpoint {:headers headers})
+        body     (:body response)]
+    (if (:parse? options)
+      (json/read-str body {:key-fn json->clj-keys})
+      body)))
 
 (s/fdef get!
   :args (s/cat :endpoint ::endpoint
-               :credentials ::specs.credentials/credentials)
+               :credentials ::specs.credentials/credentials
+               :options ::options)
   :ret ::api-response)
 
 (defn ^:private with-headers
