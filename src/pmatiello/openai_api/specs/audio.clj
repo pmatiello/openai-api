@@ -10,9 +10,13 @@
 (s/def ::response-format string?)
 (s/def ::temperature number?)
 
-(s/def ::params
+(s/def ::transcription-params
   (s/keys :req-un [::file ::model]
           :opt-un [::language ::prompt ::response-format ::temperature]))
+
+(s/def ::translation-params
+  (s/keys :req-un [::file ::model]
+          :opt-un [::prompt ::response-format ::temperature]))
 
 (s/def ::text string?)
 

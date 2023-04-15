@@ -117,6 +117,16 @@
               {:multipart params} credentials))
 
 (s/fdef audio-transcription
-  :args (s/cat :params ::specs.audio/params
+  :args (s/cat :params ::specs.audio/transcription-params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.audio/result)
+
+(defn audio-translation
+  [params credentials]
+  (http/post! "https://api.openai.com/v1/audio/translations"
+              {:multipart params} credentials))
+
+(s/fdef audio-translation
+  :args (s/cat :params ::specs.audio/translation-params
                :credentials ::specs.credentials/credentials)
   :ret ::specs.audio/result)
