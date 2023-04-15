@@ -21,3 +21,7 @@ The following commands will execute the integration tests:
 % export OPENAI_API_KEY="<OpenAI API key>"
 % clj -X:test :patterns '["pmatiello.openai-api.integration-tests"]'
 ```
+
+## Contribution Policy
+
+This software is open-source, but closed to contributions.
