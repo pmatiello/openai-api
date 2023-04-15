@@ -96,9 +96,15 @@
     (mfn/providing
       (http/get! "https://api.openai.com/v1/files" 'credentials) 'response)))
 
-(deftest file-upload-test
+(deftest file-upload!-test
   (mfn/testing "uploads a file"
-    (is (= 'response (api/file-upload 'params 'credentials)))
+    (is (= 'response (api/file-upload! 'params 'credentials)))
     (mfn/providing
       (http/post! "https://api.openai.com/v1/files"
                   {:multipart 'params} 'credentials) 'response)))
+
+(deftest file-delete!-test
+  (mfn/testing "deletes the given file"
+    (is (= 'response (api/file-delete! 'id 'credentials)))
+    (mfn/providing
+      (http/delete! "https://api.openai.com/v1/files/id" 'credentials) 'response)))

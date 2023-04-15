@@ -30,3 +30,8 @@
 (s/def ::upload-result
   (s/keys :req-un [::bytes ::created-at ::filename ::id ::object ::purpose
                    ::status ::status-details]))
+
+(s/def ::deleted boolean?)
+
+(s/def ::delete-result
+  (s/keys :req-un [::deleted ::id ::object]))

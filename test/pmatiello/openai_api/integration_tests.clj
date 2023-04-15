@@ -90,14 +90,21 @@
                                 :file  (io/file "test/fixtures/audio-pt.m4a")}
                                credentials))))
 
-(deftest file-upload-test
-  (is (s/valid?
-        :pmatiello.openai-api.specs.file/upload-result
-        (api/file-upload {:file (io/file "test/fixtures/colors.txt")
-                          :purpose "fine-tune"}
-                         credentials))))
-
 (deftest files-test
-  (is (s/valid?
-        :pmatiello.openai-api.specs.file/result-list
-        (api/files credentials))))
+  (testing "file-upload!"
+    (is (s/valid?
+          :pmatiello.openai-api.specs.file/upload-result
+          (api/file-upload! {:file    (io/file "test/fixtures/colors.txt")
+                             :purpose "fine-tune"}
+                            credentials))))
+
+  (testing "files"
+    (is (s/valid?
+          :pmatiello.openai-api.specs.file/result-list
+          (api/files credentials))))
+
+  (testing "file-delete!"
+    (is (s/valid?
+          :pmatiello.openai-api.specs.file/delete-result
+          (api/file-delete! (-> credentials api/files :data first :id)
+                            credentials)))))

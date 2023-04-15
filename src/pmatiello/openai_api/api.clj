@@ -141,12 +141,22 @@
   :args (s/cat :credentials ::specs.credentials/credentials)
   :ret ::specs.file/result-list)
 
-(defn file-upload
+(defn file-upload!
   [params credentials]
   (http/post! "https://api.openai.com/v1/files"
               {:multipart params} credentials))
 
-(s/fdef file-upload
+(s/fdef file-upload!
   :args (s/cat :params ::specs.file/upload-params
                :credentials ::specs.credentials/credentials)
   :ret ::specs.file/upload-result)
+
+(defn file-delete!
+  [id credentials]
+  (http/delete! (str "https://api.openai.com/v1/files/" id)
+                credentials))
+
+(s/fdef file-delete!
+  :args (s/cat :id ::specs.file/id
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.file/delete-result)

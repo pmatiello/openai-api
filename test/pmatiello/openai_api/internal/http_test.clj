@@ -81,3 +81,10 @@
                      {:headers   {"Authorization" "Bearer api-key"}
                       :multipart [{:name "file" :content file}]})
         {:status 200 :body "{\"data\":\"ok\"}"}))))
+
+(mfn/deftest delete!-test
+  (mfn/testing "makes get request to endpoint and returns the response body"
+    (is (= {:data "ok"} (http/delete! 'endpoint credentials)))
+    (mfn/providing
+      (client/delete 'endpoint {:headers {"Authorization" "Bearer api-key"}})
+      {:status 200 :body "{\"data\":\"ok\"}"})))

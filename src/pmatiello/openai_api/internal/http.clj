@@ -85,3 +85,14 @@
                :params ::params
                :credentials ::specs.credentials/credentials)
   :ret ::api-response)
+
+(defn delete!
+  [endpoint credentials]
+  (let [headers  (credentials->headers credentials)
+        response (client/delete endpoint {:headers headers})]
+    (json/read-str (:body response) {:key-fn json->clj-keys})))
+
+(s/fdef delete!
+  :args (s/cat :endpoint ::endpoint
+               :credentials ::specs.credentials/credentials)
+  :ret ::api-response)
