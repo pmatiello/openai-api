@@ -121,3 +121,16 @@
     (is (= 'response (api/file-delete! 'id 'credentials)))
     (mfn/providing
       (http/delete! "https://api.openai.com/v1/files/id" 'credentials) 'response)))
+
+(deftest fine-tune-create!-test
+  (mfn/testing "creates a fine-tuned model"
+    (is (= 'response (api/fine-tune-create! 'params 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/fine-tunes"
+                  {:body 'params} 'credentials) 'response)))
+
+(mfn/deftest fine-tunes-test
+  (mfn/testing "retrieves list of fine-tunes"
+    (is (= 'response (api/fine-tunes 'credentials)))
+    (mfn/providing
+      (http/get! "https://api.openai.com/v1/fine-tunes" 'credentials) 'response)))

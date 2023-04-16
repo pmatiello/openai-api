@@ -8,6 +8,7 @@
             [pmatiello.openai-api.specs.edit :as specs.edit]
             [pmatiello.openai-api.specs.embedding :as specs.embedding]
             [pmatiello.openai-api.specs.file :as specs.file]
+            [pmatiello.openai-api.specs.fine-tune :as specs.fine-tune]
             [pmatiello.openai-api.specs.image :as specs.image]
             [pmatiello.openai-api.specs.model :as specs.model]))
 
@@ -180,3 +181,21 @@
   :args (s/cat :id ::specs.file/id
                :credentials ::specs.credentials/credentials)
   :ret ::specs.file/delete-result)
+
+(defn fine-tunes
+  [credentials]
+  (http/get! "https://api.openai.com/v1/fine-tunes" credentials))
+
+(s/fdef fine-tunes
+  :args (s/cat :credentials ::specs.credentials/credentials)
+  :ret ::specs.fine-tune/result-list)
+
+(defn fine-tune-create!
+  [params credentials]
+  (http/post! "https://api.openai.com/v1/fine-tunes"
+              {:body params} credentials))
+
+(s/fdef fine-tune-create!
+  :args (s/cat :params ::specs.fine-tune/create-params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.fine-tune/result)

@@ -91,6 +91,10 @@
                                credentials))))
 
 (deftest files-test
+  (testing "setup"
+    (doseq [each (->> credentials api/files :data (map :id))]
+      (api/file-delete! each credentials)))
+
   (testing "file-upload!"
     (is (s/valid?
           :pmatiello.openai-api.specs.file/upload-result
@@ -123,3 +127,29 @@
           :pmatiello.openai-api.specs.file/delete-result
           (api/file-delete! (-> credentials api/files :data first :id)
                             credentials)))))
+
+(deftest fine-tunes-test
+  (testing "setup"
+    (doseq [each (->> credentials api/files :data (map :id))]
+      (api/file-delete! each credentials))
+
+    (api/file-upload! {:file    (io/file "test/fixtures/colors.txt")
+                       :purpose "fine-tune"}
+                      credentials)
+
+    (while
+      (->> credentials api/files :data (map :status) (every? #{"processed"}) not)
+      (Thread/sleep 1000)))
+
+  (testing "fine-tune-create!"
+    (is (s/valid?
+          :pmatiello.openai-api.specs.fine-tune/result
+          (api/fine-tune-create!
+            {:training-file (->> credentials api/files :data first :id)
+             :model         "ada"}
+            credentials))))
+
+  (testing "fine-tunes"
+    (is (s/valid?
+          :pmatiello.openai-api.specs.fine-tune/result-list
+          (api/fine-tunes credentials)))))

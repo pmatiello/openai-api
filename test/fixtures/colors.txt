@@ -1,6 +1,6 @@
-  {"prompt": "Red", "completion": "#FF0000"}
-  {"prompt": "Blue", "completion": "#0000FF"}
-  {"prompt": "Yellow", "completion": "#FFFF00"}
-  {"prompt": "Orange", "completion": "#FFA500"}
-  {"prompt": "Green", "completion": "#008000"}
-  {"prompt": "Purple", "completion": "#800080"}
+  {"prompt": "red", "completion": "#FF0000"}
+  {"prompt": "blue", "completion": "#0000FF"}
+  {"prompt": "yellow", "completion": "#FFFF00"}
+  {"prompt": "orange", "completion": "#FFA500"}
+  {"prompt": "green", "completion": "#008000"}
+  {"prompt": "purple", "completion": "#800080"}
