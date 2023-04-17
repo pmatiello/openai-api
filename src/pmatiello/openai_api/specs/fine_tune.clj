@@ -65,3 +65,8 @@
 
 (s/def ::result-list
   (s/keys :req-un [::data ::object]))
+
+(s/def ::deleted boolean?)
+
+(s/def ::delete-result
+  (s/keys :req-un [::deleted ::id ::object]))

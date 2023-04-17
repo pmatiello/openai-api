@@ -190,6 +190,16 @@
   :args (s/cat :credentials ::specs.credentials/credentials)
   :ret ::specs.fine-tune/result-list)
 
+(defn fine-tune
+  [fine-tune-id credentials]
+  (http/get! (str "https://api.openai.com/v1/fine-tunes/" (name fine-tune-id))
+             credentials))
+
+(s/fdef fine-tune
+  :args (s/cat :fine-tune-id ::specs.fine-tune/id
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.fine-tune/result)
+
 (defn fine-tune-create!
   [params credentials]
   (http/post! "https://api.openai.com/v1/fine-tunes"
@@ -199,3 +209,12 @@
   :args (s/cat :params ::specs.fine-tune/create-params
                :credentials ::specs.credentials/credentials)
   :ret ::specs.fine-tune/result)
+
+(defn fine-tune-delete!
+  [model credentials]
+  (http/delete! (str "https://api.openai.com/v1/models/" model) credentials))
+
+(s/fdef fine-tune-delete!
+  :args (s/cat :model ::specs.fine-tune/model
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.fine-tune/delete-result)
