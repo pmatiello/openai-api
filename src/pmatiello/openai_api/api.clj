@@ -31,17 +31,17 @@
 
 (s/fdef models
   :args (s/cat :credentials ::specs.credentials/credentials)
-  :ret ::specs.model/result-list)
+  :ret ::specs.model/description-list)
 
 (defn model
-  [model credentials]
-  (http/get! (str "https://api.openai.com/v1/models/" (name model))
+  [id credentials]
+  (http/get! (str "https://api.openai.com/v1/models/" (name id))
              credentials))
 
 (s/fdef model
-  :args (s/cat :model ::specs.model/model
+  :args (s/cat :id ::specs.model/id
                :credentials ::specs.credentials/credentials)
-  :ret ::specs.model/result)
+  :ret ::specs.model/description)
 
 (defn completion
   [params credentials]
