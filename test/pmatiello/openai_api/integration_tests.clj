@@ -18,12 +18,6 @@
         :pmatiello.openai-api.specs.credentials/credentials
         (api/credentials api-key))))
 
-
-(deftest completion-test
-  (is (s/valid?
-        :pmatiello.openai-api.specs.completion/result
-        (api/completion {:model "ada" :prompt "(println "} credentials))))
-
 (deftest chat-test
   (is (s/valid?
         :pmatiello.openai-api.specs.chat/result

@@ -17,3 +17,6 @@
 
 (api/model "gpt-3.5-turbo" credentials)
 (s/valid? :pmatiello.openai-api.specs.model/description *1)
+
+(api/completion {:model "ada" :prompt "hello"} credentials)
+(s/valid? :pmatiello.openai-api.specs.completion/result *1)
