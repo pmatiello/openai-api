@@ -22,9 +22,9 @@
 
 (mfn/deftest model-test
   (mfn/testing "retrieves the given model"
-    (is (= 'response (api/model :teapot 'credentials)))
+    (is (= 'response (api/model 'model 'credentials)))
     (mfn/providing
-      (http/get! "https://api.openai.com/v1/models/teapot" 'credentials) 'response)))
+      (http/get! "https://api.openai.com/v1/models/model" 'credentials) 'response)))
 
 
 (mfn/deftest completion-test

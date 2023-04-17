@@ -1,7 +1,7 @@
 (ns pmatiello.openai-api.specs.model
   (:require [clojure.spec.alpha :as s]))
 
-(s/def ::model keyword?)
+(s/def ::model string?)
 
 (s/def ::created number?)
 (s/def ::id string?)

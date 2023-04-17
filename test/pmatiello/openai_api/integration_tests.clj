@@ -26,7 +26,7 @@
 (deftest model-test
   (is (s/valid?
         :pmatiello.openai-api.specs.model/result
-        (api/model :gpt-3.5-turbo credentials))))
+        (api/model "gpt-3.5-turbo" credentials))))
 
 (deftest completion-test
   (is (s/valid?
