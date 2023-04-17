@@ -20,3 +20,8 @@
 
 (api/completion {:model "ada" :prompt "hello"} credentials)
 (s/valid? :pmatiello.openai-api.specs.completion/result *1)
+
+(api/chat {:model    "gpt-3.5-turbo"
+           :messages [{:role "user" :content "(println \"hello"}]}
+          credentials)
+(s/valid? :pmatiello.openai-api.specs.chat/result *1)

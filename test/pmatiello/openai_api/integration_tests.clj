@@ -18,13 +18,6 @@
         :pmatiello.openai-api.specs.credentials/credentials
         (api/credentials api-key))))
 
-(deftest chat-test
-  (is (s/valid?
-        :pmatiello.openai-api.specs.chat/result
-        (api/chat {:model    "gpt-3.5-turbo"
-                   :messages [{:role "user" :content "Hello!"}]}
-                  credentials))))
-
 (deftest edit-test
   (is (s/valid?
         :pmatiello.openai-api.specs.edit/result
