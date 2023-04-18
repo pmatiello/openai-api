@@ -18,13 +18,6 @@
         :pmatiello.openai-api.specs.credentials/credentials
         (api/credentials api-key))))
 
-(deftest embedding-test
-  (is (s/valid?
-        :pmatiello.openai-api.specs.embedding/result
-        (api/embedding {:model "text-embedding-ada-002"
-                        :input "kittens napping."}
-                       credentials))))
-
 (deftest audio-transcription-test
   (is (s/valid?
         :pmatiello.openai-api.specs.audio/result

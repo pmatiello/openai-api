@@ -46,3 +46,8 @@
 
 (api/image-variation {:image (io/file "test/fixtures/image.png")} credentials)
 (s/valid? :pmatiello.openai-api.specs.image/result *1)
+
+(api/embedding {:model "text-embedding-ada-002"
+                :input "brick wall"}
+               credentials)
+(s/valid? :pmatiello.openai-api.specs.embedding/result *1)

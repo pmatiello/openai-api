@@ -17,7 +17,7 @@
   {:image (io/file "test/fixtures/image.png")})
 
 (def ^:private result
-  {:created 1681859884,
+  {:created 1681859884
    :data    [{:url "https://oaidalleapiprodscus.blob.core.windows.net/private/..."}]})
 
 (deftest generation-params-test
