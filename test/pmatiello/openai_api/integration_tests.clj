@@ -18,27 +18,6 @@
         :pmatiello.openai-api.specs.credentials/credentials
         (api/credentials api-key))))
 
-(deftest image-generation-test
-  (is (s/valid?
-        :pmatiello.openai-api.specs.image/result
-        (api/image-generation {:prompt "kitten" :response-format "url"}
-                              credentials))))
-
-(deftest image-edit-test
-  (is (s/valid?
-        :pmatiello.openai-api.specs.image/result
-        (api/image-edit {:image           (io/file "test/fixtures/image.png")
-                         :mask            (io/file "test/fixtures/mask.png")
-                         :prompt          "brick wall with a graffiti"
-                         :response-format "url"}
-                        credentials))))
-
-(deftest image-variation-test
-  (is (s/valid?
-        :pmatiello.openai-api.specs.image/result
-        (api/image-variation {:image (io/file "test/fixtures/image.png")}
-                             credentials))))
-
 (deftest embedding-test
   (is (s/valid?
         :pmatiello.openai-api.specs.embedding/result

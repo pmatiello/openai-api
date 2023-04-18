@@ -22,5 +22,5 @@
 (deftest params-test
   (is (s/valid? ::specs.completion/params params)))
 
-(deftest text-completion-test
+(deftest result-test
   (is (s/valid? ::specs.completion/result result)))

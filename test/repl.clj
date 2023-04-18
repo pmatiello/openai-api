@@ -31,3 +31,18 @@
            :input       "(println \"hello)"}
           credentials)
 (s/valid? :pmatiello.openai-api.specs.edit/result *1)
+
+(api/image-generation {:prompt          "brick wall"
+                       :response-format "url"}
+                      credentials)
+(s/valid? :pmatiello.openai-api.specs.image/result *1)
+
+(api/image-edit {:image           (io/file "test/fixtures/image.png")
+                 :mask            (io/file "test/fixtures/mask.png")
+                 :prompt          "brick wall with a graffiti"
+                 :response-format "url"}
+                credentials)
+(s/valid? :pmatiello.openai-api.specs.image/result *1)
+
+(api/image-variation {:image (io/file "test/fixtures/image.png")} credentials)
+(s/valid? :pmatiello.openai-api.specs.image/result *1)
