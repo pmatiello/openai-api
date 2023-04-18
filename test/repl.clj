@@ -25,3 +25,9 @@
            :messages [{:role "user" :content "(println \"hello"}]}
           credentials)
 (s/valid? :pmatiello.openai-api.specs.chat/result *1)
+
+(api/edit {:model       "code-davinci-edit-001"
+           :instruction "Fix clojure code."
+           :input       "(println \"hello)"}
+          credentials)
+(s/valid? :pmatiello.openai-api.specs.edit/result *1)
