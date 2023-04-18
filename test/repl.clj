@@ -51,3 +51,13 @@
                 :input "brick wall"}
                credentials)
 (s/valid? :pmatiello.openai-api.specs.embedding/result *1)
+
+(api/audio-transcription {:model "whisper-1"
+                          :file  (io/file "test/fixtures/audio.m4a")}
+                         credentials)
+(s/valid? :pmatiello.openai-api.specs.audio/result *1)
+
+(api/audio-translation {:model "whisper-1"
+                        :file  (io/file "test/fixtures/audio-pt.m4a")}
+                       credentials)
+(s/valid? :pmatiello.openai-api.specs.audio/result *1)

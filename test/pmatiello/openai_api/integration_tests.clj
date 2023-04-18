@@ -18,20 +18,6 @@
         :pmatiello.openai-api.specs.credentials/credentials
         (api/credentials api-key))))
 
-(deftest audio-transcription-test
-  (is (s/valid?
-        :pmatiello.openai-api.specs.audio/result
-        (api/audio-transcription {:model "whisper-1"
-                                  :file  (io/file "test/fixtures/audio.m4a")}
-                                 credentials))))
-
-(deftest audio-translation-test
-  (is (s/valid?
-        :pmatiello.openai-api.specs.audio/result
-        (api/audio-translation {:model "whisper-1"
-                                :file  (io/file "test/fixtures/audio-pt.m4a")}
-                               credentials))))
-
 (deftest files-test
   (testing "setup"
     (doseq [each (->> credentials api/files :data (map :id))]
