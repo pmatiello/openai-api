@@ -9,13 +9,13 @@
 (s/def ::object string?)
 (s/def ::purpose string?)
 
-(s/def ::data*
+(s/def ::description
   (s/keys :req-un [::bytes ::created-at ::filename ::id ::object ::purpose]))
 
 (s/def ::data
-  (s/coll-of ::data*))
+  (s/coll-of ::description))
 
-(s/def ::result-list
+(s/def ::description-list
   (s/keys :req-un [::data ::object]))
 
 (s/def ::status string?)

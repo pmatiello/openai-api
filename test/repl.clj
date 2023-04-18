@@ -61,3 +61,26 @@
                         :file  (io/file "test/fixtures/audio-pt.m4a")}
                        credentials)
 (s/valid? :pmatiello.openai-api.specs.audio/result *1)
+
+(api/file-upload! {:file    (io/file "test/fixtures/colors.txt")
+                   :purpose "fine-tune"}
+                  credentials)
+(s/valid? :pmatiello.openai-api.specs.file/upload-result *1)
+
+(api/files credentials)
+(s/valid? :pmatiello.openai-api.specs.file/description-list *1)
+
+(api/file (-> credentials api/files :data first :id) credentials)
+
+(api/file-content (-> credentials api/files :data first :id) credentials)
+(s/valid? string? *1)
+
+(api/file-delete! (-> credentials api/files :data first :id) credentials)
+(s/valid? :pmatiello.openai-api.specs.file/delete-result *1)
+
+(comment
+  "cleanup"
+
+  "WARNING: deletes all files in the account"
+  (doseq [each (->> credentials api/files :data (map :id))]
+    (api/file-delete! each credentials)))

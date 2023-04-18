@@ -18,44 +18,6 @@
         :pmatiello.openai-api.specs.credentials/credentials
         (api/credentials api-key))))
 
-(deftest files-test
-  (testing "setup"
-    (doseq [each (->> credentials api/files :data (map :id))]
-      (api/file-delete! each credentials)))
-
-  (testing "file-upload!"
-    (is (s/valid?
-          :pmatiello.openai-api.specs.file/upload-result
-          (api/file-upload! {:file    (io/file "test/fixtures/colors.txt")
-                             :purpose "fine-tune"}
-                            credentials))))
-
-  (testing "files"
-    (is (s/valid?
-          :pmatiello.openai-api.specs.file/result-list
-          (api/files credentials))))
-
-  (while
-    (->> credentials api/files :data (map :status) (every? #{"processed"}) not)
-    (Thread/sleep 1000))
-
-  (testing "file"
-    (is (s/valid?
-          :pmatiello.openai-api.specs.file/result
-          (api/file (-> credentials api/files :data first :id) credentials))))
-
-  (testing "file-content"
-    (is (s/valid?
-          string?
-          (api/file-content (-> credentials api/files :data first :id)
-                            credentials))))
-
-  (testing "file-delete!"
-    (is (s/valid?
-          :pmatiello.openai-api.specs.file/delete-result
-          (api/file-delete! (-> credentials api/files :data first :id)
-                            credentials)))))
-
 (deftest fine-tunes-test
   (testing "setup"
     (doseq [each (->> credentials api/files :data (map :id))]

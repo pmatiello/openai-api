@@ -140,7 +140,7 @@
 
 (s/fdef files
   :args (s/cat :credentials ::specs.credentials/credentials)
-  :ret ::specs.file/result-list)
+  :ret ::specs.file/description-list)
 
 (defn file
   [id credentials]
