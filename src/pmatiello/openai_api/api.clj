@@ -188,7 +188,7 @@
 
 (s/fdef fine-tunes
   :args (s/cat :credentials ::specs.credentials/credentials)
-  :ret ::specs.fine-tune/result-list)
+  :ret ::specs.fine-tune/description-list)
 
 (defn fine-tune
   [fine-tune-id credentials]
@@ -198,7 +198,7 @@
 (s/fdef fine-tune
   :args (s/cat :fine-tune-id ::specs.fine-tune/id
                :credentials ::specs.credentials/credentials)
-  :ret ::specs.fine-tune/result)
+  :ret ::specs.fine-tune/description)
 
 (defn fine-tune-create!
   [params credentials]
@@ -208,7 +208,7 @@
 (s/fdef fine-tune-create!
   :args (s/cat :params ::specs.fine-tune/create-params
                :credentials ::specs.credentials/credentials)
-  :ret ::specs.fine-tune/result)
+  :ret ::specs.fine-tune/description)
 
 (defn fine-tune-delete!
   [model credentials]

@@ -51,7 +51,7 @@
 (s/def ::validation-files
   (s/coll-of ::specs.file/result))
 
-(s/def ::result
+(s/def ::description
   (s/keys :req-un [::created-at ::events ::fine-tuned-model ::hyperparams ::id
                    ::model ::object ::organization-id ::result-files ::status
                    ::training-files ::updated-at ::validation-files]))
@@ -63,7 +63,7 @@
 (s/def ::data
   (s/coll-of ::data*))
 
-(s/def ::result-list
+(s/def ::description-list
   (s/keys :req-un [::data ::object]))
 
 (s/def ::deleted boolean?)

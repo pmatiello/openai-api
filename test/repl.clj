@@ -78,9 +78,37 @@
 (api/file-delete! (-> credentials api/files :data first :id) credentials)
 (s/valid? :pmatiello.openai-api.specs.file/delete-result *1)
 
+(api/fine-tune-create!
+  {:training-file (->> credentials api/files :data
+                       (filter #(-> % :filename #{"colors.txt"}))
+                       first :id)
+   :model         "ada"}
+  credentials)
+(s/valid? :pmatiello.openai-api.specs.fine-tune/description *1)
+
+(api/fine-tunes credentials)
+(s/valid? :pmatiello.openai-api.specs.fine-tune/description-list *1)
+
+(api/fine-tune
+  (-> credentials api/fine-tunes :data last :id)
+  credentials)
+(s/valid? :pmatiello.openai-api.specs.fine-tune/description *1)
+
+(api/fine-tune-delete!
+  (->> credentials api/models :data
+       (filter #(->> % :owned-by (re-matches #"user-.*"))) last :id)
+  credentials)
+(s/valid? :pmatiello.openai-api.specs.fine-tune/delete-result *1)
+
 (comment
   "cleanup"
 
   "WARNING: deletes all files in the account"
   (doseq [each (->> credentials api/files :data (map :id))]
-    (api/file-delete! each credentials)))
+    (api/file-delete! each credentials))
+
+  "WARNING: deletes all user's fine-tuned models in the account"
+  (doseq [each (->> credentials api/models :data
+                    (filter #(->> % :owned-by (re-matches #"user-.*")))
+                    (map :id))]
+    (api/fine-tune-delete! each credentials)))
