@@ -191,14 +191,24 @@
   :ret ::specs.fine-tune/description-list)
 
 (defn fine-tune
-  [fine-tune-id credentials]
-  (http/get! (str "https://api.openai.com/v1/fine-tunes/" (name fine-tune-id))
+  [id credentials]
+  (http/get! (str "https://api.openai.com/v1/fine-tunes/" (name id))
              credentials))
 
 (s/fdef fine-tune
-  :args (s/cat :fine-tune-id ::specs.fine-tune/id
+  :args (s/cat :id ::specs.fine-tune/id
                :credentials ::specs.credentials/credentials)
   :ret ::specs.fine-tune/description)
+
+(defn fine-tune-events
+  [id credentials]
+  (http/get! (str "https://api.openai.com/v1/fine-tunes/" id "/events")
+             credentials))
+
+(s/fdef fine-tune-events
+  :args (s/cat :id ::specs.fine-tune/id
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.fine-tune/event-list)
 
 (defn fine-tune-create!
   [params credentials]
@@ -207,6 +217,16 @@
 
 (s/fdef fine-tune-create!
   :args (s/cat :params ::specs.fine-tune/create-params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.fine-tune/description)
+
+(defn fine-tune-cancel!
+  [id credentials]
+  (http/post! (str "https://api.openai.com/v1/fine-tunes/" id "/cancel")
+              {} credentials))
+
+(s/fdef fine-tune-cancel!
+  :args (s/cat :id ::specs.fine-tune/id
                :credentials ::specs.credentials/credentials)
   :ret ::specs.fine-tune/description)
 

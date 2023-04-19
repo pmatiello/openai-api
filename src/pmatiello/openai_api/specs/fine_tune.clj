@@ -66,6 +66,11 @@
 (s/def ::description-list
   (s/keys :req-un [::data ::object]))
 
+(s/def :pmatiello.openai-api.specs.fine-tune.event/data ::events)
+
+(s/def ::event-list
+  (s/keys :req-un [::object :pmatiello.openai-api.specs.fine-tune.event/data]))
+
 (s/def ::deleted boolean?)
 
 (s/def ::delete-result

@@ -130,9 +130,16 @@
 
 (deftest fine-tune-test
   (mfn/testing "retrieves a fine-tune"
-    (is (= 'response (api/fine-tune 'fine-tune-id 'credentials)))
+    (is (= 'response (api/fine-tune 'id 'credentials)))
     (mfn/providing
-      (http/get! "https://api.openai.com/v1/fine-tunes/fine-tune-id" 'credentials)
+      (http/get! "https://api.openai.com/v1/fine-tunes/id" 'credentials)
+      'response)))
+
+(deftest fine-tune-events-test
+  (mfn/testing "retrieves events for a fine-tune"
+    (is (= 'response (api/fine-tune-events 'id 'credentials)))
+    (mfn/providing
+      (http/get! "https://api.openai.com/v1/fine-tunes/id/events" 'credentials)
       'response)))
 
 (deftest fine-tune-create!-test
@@ -142,9 +149,16 @@
       (http/post! "https://api.openai.com/v1/fine-tunes"
                   {:body 'params} 'credentials) 'response)))
 
+(deftest fine-tune-cancel!-test
+  (mfn/testing "cancels a fine-tune job"
+    (is (= 'response (api/fine-tune-cancel! 'id 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/fine-tunes/id/cancel"
+                  {} 'credentials) 'response)))
+
 (deftest fine-tune-delete!-test
   (mfn/testing "deletes a fine-tuned model"
     (is (= 'response (api/fine-tune-delete! 'model 'credentials)))
     (mfn/providing
       (http/delete! "https://api.openai.com/v1/models/model"
-                   'credentials) 'response)))
+                    'credentials) 'response)))

@@ -94,6 +94,16 @@
   credentials)
 (s/valid? :pmatiello.openai-api.specs.fine-tune/description *1)
 
+(api/fine-tune-events
+  (-> credentials api/fine-tunes :data last :id)
+  credentials)
+(s/valid? :pmatiello.openai-api.specs.fine-tune/event-list *1)
+
+(api/fine-tune-cancel!
+  (-> credentials api/fine-tunes :data last :id)
+  credentials)
+(s/valid? :pmatiello.openai-api.specs.fine-tune/description *1)
+
 (api/fine-tune-delete!
   (->> credentials api/models :data
        (filter #(->> % :owned-by (re-matches #"user-.*"))) last :id)

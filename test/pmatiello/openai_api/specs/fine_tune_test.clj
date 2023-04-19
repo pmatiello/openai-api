@@ -42,6 +42,17 @@
   {:object "list"
    :data   [description]})
 
+(def ^:private event-list
+  {:object "list"
+   :data [{:object "fine-tune-event"
+           :level "info"
+           :message "Created fine-tune: ft-KI37KjJtPabr4Ai6mTAbe8n8"
+           :created-at 1681945137}
+          {:object "fine-tune-event"
+           :level "info"
+           :message "Fine-tune cancelled"
+           :created-at 1681945140}]})
+
 (def ^:private create-params
   {:training-file "file-DWRV2BYz7oRbodlyTjjqeNE9"
    :model         "ada"})
@@ -56,6 +67,9 @@
 
 (deftest description-list-test
   (s/valid? ::specs.fine-tune/description-list description-list))
+
+(deftest event-list-test
+  (s/valid? ::specs.fine-tune/event-list event-list))
 
 (deftest create-params-test
   (s/valid? ::specs.fine-tune/create-params create-params))
