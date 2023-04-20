@@ -1,9 +1,33 @@
 # pmatiello.openai-api
 
-A Clojure library for interacting with the OpenAI API.
+This library provides a wrapper around the [OpenAI API](https://platform.openai.com),
+offering various functions for interacting with the API's capabilities. These include
+text generation, image generation and editing, embeddings, audio transcription and 
+translation, file management, fine-tuning, and content moderation.
 
 **Notice:** This is not an official OpenAI project nor is it affiliated with
 OpenAI in any way.
+
+## Usage
+
+The functions for interacting with the OpenAI API are located in the 
+`pmatiello.openai-api.api` namespace. An API key is required for usage.
+
+```clj
+(require '[pmatiello.openai-api.api :as openai])
+
+(def credentials
+  (openai/credentials api-key))
+
+(openai/chat {:model    "gpt-3.5-turbo"
+              :messages [{:role    "user"
+                          :content "Fix: (println \"hello"}]}
+             credentials)
+```
+
+Refer to the function specs and the official
+[OpenAI API reference](https://platform.openai.com/docs/api-reference) for details
+about the parameters required for these functions.
 
 ## Development
 
