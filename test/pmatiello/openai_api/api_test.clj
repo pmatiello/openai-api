@@ -162,3 +162,10 @@
     (mfn/providing
       (http/delete! "https://api.openai.com/v1/models/model"
                     'credentials) 'response)))
+
+(deftest moderation-test
+  (mfn/testing "retrieves moderation classification for input"
+    (is (= 'response (api/moderation 'params 'credentials)))
+    (mfn/providing
+      (http/post! "https://api.openai.com/v1/moderations"
+                  {:body 'params} 'credentials) 'response)))

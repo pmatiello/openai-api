@@ -5,6 +5,7 @@
             [pmatiello.openai-api.specs.chat :as specs.chat]
             [pmatiello.openai-api.specs.completion :as specs.completion]
             [pmatiello.openai-api.specs.credentials :as specs.credentials]
+            [pmatiello.openai-api.specs.moderation :as specs.moderation]
             [pmatiello.openai-api.specs.edit :as specs.edit]
             [pmatiello.openai-api.specs.embedding :as specs.embedding]
             [pmatiello.openai-api.specs.file :as specs.file]
@@ -238,3 +239,13 @@
   :args (s/cat :model ::specs.fine-tune/model
                :credentials ::specs.credentials/credentials)
   :ret ::specs.fine-tune/delete-result)
+
+(defn moderation
+  [params credentials]
+  (http/post! "https://api.openai.com/v1/moderations"
+              {:body params} credentials))
+
+(s/fdef moderation
+  :args (s/cat :params ::specs.moderation/params
+               :credentials ::specs.credentials/credentials)
+  :ret ::specs.moderation/classification)

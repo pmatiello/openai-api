@@ -110,6 +110,9 @@
   credentials)
 (s/valid? :pmatiello.openai-api.specs.fine-tune/delete-result *1)
 
+(api/moderation {:input "kittens"} credentials)
+(s/valid? :pmatiello.openai-api.specs.moderation/classification *1)
+
 (comment
   "cleanup"
 
