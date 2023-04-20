@@ -1,4 +1,11 @@
 (ns pmatiello.openai-api.api
+  ^{:doc "This namespace provides a wrapper around the OpenAI API, offering various
+  functions for interacting with the API's capabilities. These include text
+  generation, image generation and editing, embeddings, audio transcription and
+  translation, file management, fine-tuning, and content moderation.
+
+  Refer to the function specs and the official OpenAI documentation for details about
+  the parameters required for these functions."}
   (:require [clojure.spec.alpha :as s]
             [pmatiello.openai-api.internal.http :as http]
             [pmatiello.openai-api.specs.audio :as specs.audio]
@@ -14,6 +21,7 @@
             [pmatiello.openai-api.specs.model :as specs.model]))
 
 (defn credentials
+  "Create a credentials map with the given API key and an optional organization id."
   ([api-key]
    {:api-key api-key})
   ([api-key org-id]
@@ -26,6 +34,7 @@
   :ret ::specs.credentials/credentials)
 
 (defn models
+  "Retrieve the list of available models."
   [credentials]
   (http/get! "https://api.openai.com/v1/models"
              credentials))
@@ -35,6 +44,7 @@
   :ret ::specs.model/description-list)
 
 (defn model
+  "Retrieve the details of a specific model by its id."
   [id credentials]
   (http/get! (str "https://api.openai.com/v1/models/" (name id))
              credentials))
@@ -45,6 +55,7 @@
   :ret ::specs.model/description)
 
 (defn completion
+  "Generate a completion based on the given parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/completions"
               {:body params} credentials))
@@ -55,6 +66,7 @@
   :ret ::specs.completion/result)
 
 (defn chat
+  "Generate a chat completion based on the given parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/chat/completions"
               {:body params} credentials))
@@ -65,6 +77,7 @@
   :ret ::specs.chat/result)
 
 (defn edit
+  "Generate an edit based on the given parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/edits"
               {:body params} credentials))
@@ -75,6 +88,7 @@
   :ret ::specs.edit/result)
 
 (defn image-generation
+  "Generate an image based on the given parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/images/generations"
               {:body params} credentials))
@@ -85,6 +99,7 @@
   :ret ::specs.image/result)
 
 (defn image-edit
+  "Edit an image based on the given parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/images/edits"
               {:multipart params} credentials))
@@ -95,6 +110,7 @@
   :ret ::specs.image/result)
 
 (defn image-variation
+  "Generate image variations based on the given parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/images/variations"
               {:multipart params} credentials))
@@ -105,6 +121,7 @@
   :ret ::specs.image/result)
 
 (defn embedding
+  "Generate an embedding based on the given parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/embeddings"
               {:body params} credentials))
@@ -115,6 +132,7 @@
   :ret ::specs.embedding/result)
 
 (defn audio-transcription
+  "Transcribe audio based on the given parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/audio/transcriptions"
               {:multipart params} credentials))
@@ -125,6 +143,7 @@
   :ret ::specs.audio/result)
 
 (defn audio-translation
+  "Translate audio based on the given parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/audio/translations"
               {:multipart params} credentials))
@@ -135,6 +154,7 @@
   :ret ::specs.audio/result)
 
 (defn files
+  "Retrieve the list of files associated with the provided credentials."
   [credentials]
   (http/get! "https://api.openai.com/v1/files"
              credentials))
@@ -144,6 +164,7 @@
   :ret ::specs.file/description-list)
 
 (defn file
+  "Retrieve the details of a specific file by its id."
   [id credentials]
   (http/get! (str "https://api.openai.com/v1/files/" id)
              credentials))
@@ -154,6 +175,7 @@
   :ret ::specs.file/result)
 
 (defn file-content
+  "Retrieve the content of a specific file by its id."
   [id credentials]
   (http/get! (str "https://api.openai.com/v1/files/" id "/content")
              credentials {:parse? false}))
@@ -164,6 +186,7 @@
   :ret string?)
 
 (defn file-upload!
+  "Upload a file with the provided parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/files"
               {:multipart params} credentials))
@@ -174,6 +197,7 @@
   :ret ::specs.file/upload-result)
 
 (defn file-delete!
+  "Delete a specific file by its id."
   [id credentials]
   (http/delete! (str "https://api.openai.com/v1/files/" id)
                 credentials))
@@ -184,6 +208,7 @@
   :ret ::specs.file/delete-result)
 
 (defn fine-tunes
+  "Retrieve the list of fine-tunes associated with the provided credentials."
   [credentials]
   (http/get! "https://api.openai.com/v1/fine-tunes" credentials))
 
@@ -192,6 +217,7 @@
   :ret ::specs.fine-tune/description-list)
 
 (defn fine-tune
+  "Retrieve the details of a specific fine-tune by its id."
   [id credentials]
   (http/get! (str "https://api.openai.com/v1/fine-tunes/" (name id))
              credentials))
@@ -202,6 +228,7 @@
   :ret ::specs.fine-tune/description)
 
 (defn fine-tune-events
+  "Retrieve the list of events for a specific fine-tune by its id."
   [id credentials]
   (http/get! (str "https://api.openai.com/v1/fine-tunes/" id "/events")
              credentials))
@@ -212,6 +239,7 @@
   :ret ::specs.fine-tune/event-list)
 
 (defn fine-tune-create!
+  "Create a new fine-tune with the provided parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/fine-tunes"
               {:body params} credentials))
@@ -222,6 +250,7 @@
   :ret ::specs.fine-tune/description)
 
 (defn fine-tune-cancel!
+  "Cancel a specific fine-tune by its id."
   [id credentials]
   (http/post! (str "https://api.openai.com/v1/fine-tunes/" id "/cancel")
               {} credentials))
@@ -232,8 +261,9 @@
   :ret ::specs.fine-tune/description)
 
 (defn fine-tune-delete!
-  [model credentials]
-  (http/delete! (str "https://api.openai.com/v1/models/" model) credentials))
+  "Delete a specific fine-tuned model by its id."
+  [model-id credentials]
+  (http/delete! (str "https://api.openai.com/v1/models/" model-id) credentials))
 
 (s/fdef fine-tune-delete!
   :args (s/cat :model ::specs.fine-tune/model
@@ -241,6 +271,7 @@
   :ret ::specs.fine-tune/delete-result)
 
 (defn moderation
+  "Perform content moderation with the provided parameters."
   [params credentials]
   (http/post! "https://api.openai.com/v1/moderations"
               {:body params} credentials))
