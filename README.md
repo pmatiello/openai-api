@@ -55,6 +55,23 @@ To clean a previous build, run:
 % clj -T:build clean
 ```
 
+### Releasing
+
+Before releasing, update the library version in the [build.clj](./build.clj) file.
+
+To release to [clojars](https://clojars.org), run:
+
+```
+% mvn deploy:deploy-file \
+      -Dfile=target/openai-api-${VERSION}.jar \
+      -DrepositoryId=clojars \
+      -Durl=https://clojars.org/repo \
+      -DpomFile=target/classes/META-INF/maven/me.pmatiello/openai-api/pom.xml
+```
+
+Notice that this step requires clojars to be configured as a server in the local
+`~/.m2/settings.xml` file.
+
 ## Contribution Policy
 
 This software is open-source, but closed to contributions.
