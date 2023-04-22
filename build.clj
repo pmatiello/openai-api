@@ -2,7 +2,7 @@
   (:require [clojure.tools.build.api :as b]))
 
 (def lib 'me.pmatiello/openai-api)
-(def version "0.1.0-test2")
+(def version "0.1.0-test3")
 (def class-dir "target/classes")
 (def basis (b/create-basis {:project "deps.edn"}))
 (def jar-file (format "target/%s-%s.jar" (name lib) version))
@@ -19,7 +19,7 @@
                     :scm       {:url                 "https://github.com/pmatiello/openai-api"
                                 :connection          "scm:git:git://github.com/pmatiello/openai-api.git"
                                 :developerConnection "scm:git:ssh://git@github.com:pmatiello/openai-api.git"
-                                :tag                 version}})
+                                :tag                 (str "v" version)}})
       (b/copy-dir {:src-dirs   ["src"]
                    :target-dir class-dir})
       (b/jar {:class-dir class-dir
