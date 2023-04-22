@@ -59,6 +59,15 @@ To clean a previous build, run:
 
 Before releasing, update the library version in the [build.clj](./build.clj) file.
 
+Make a commit and generate a new tag:
+
+```
+% git commit -a -m "Release: ${VERSION}"
+% git tag -a "v${VERSION}" -m "Release: ${VERSION}"
+% git push
+% git push origin "v${VERSION}" 
+```
+
 To release to [clojars](https://clojars.org), run:
 
 ```
