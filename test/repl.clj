@@ -1,4 +1,4 @@
-(require '[pmatiello.openai-api.api :as openai])
+(require '[me.pmatiello.openai-api.api :as openai])
 (require '[clojure.java.io :as io])
 (require '[clojure.spec.alpha :as s])
 (require '[clojure.java.browse :refer [browse-url]])

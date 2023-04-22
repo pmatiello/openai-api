@@ -1,7 +1,7 @@
 (ns build
   (:require [clojure.tools.build.api :as b]))
 
-(def lib 'pmatiello/openai-api)
+(def lib 'me.pmatiello/openai-api)
 (def version "0.1.0")
 (def class-dir "target/classes")
 (def basis (b/create-basis {:project "deps.edn"}))

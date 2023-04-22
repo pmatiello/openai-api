@@ -14,7 +14,7 @@ The functions for interacting with the OpenAI API are located in the
 `pmatiello.openai-api.api` namespace. An API key is required for usage.
 
 ```clj
-(require '[pmatiello.openai-api.api :as openai])
+(require '[me.pmatiello.openai-api.api :as openai])
 
 (def credentials
   (openai/credentials api-key))
@@ -30,6 +30,8 @@ Refer to the function specs and the official
 about the parameters required for these functions.
 
 ## Development
+
+Information for developing this library.
 
 ### Running tests
 
