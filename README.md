@@ -1,4 +1,4 @@
-# pmatiello.openai-api
+# me.pmatiello/openai-api
 
 This library provides a wrapper around the [OpenAI API](https://platform.openai.com),
 offering various functions for interacting with the API's capabilities. These include
