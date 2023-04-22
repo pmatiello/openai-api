@@ -1,17 +1,24 @@
 # me.pmatiello/openai-api
 
-This library provides a wrapper around the [OpenAI API](https://platform.openai.com),
-offering various functions for interacting with the API's capabilities. These include
-text generation, image generation and editing, embeddings, audio transcription and 
-translation, file management, fine-tuning, and content moderation.
+This library provides a pure-Clojure wrapper around the
+[OpenAI API](https://platform.openai.com), offering various functions for interacting
+with the API's capabilities. These include text generation, image generation and
+editing, embeddings, audio transcription and translation, file management,
+fine-tuning, and content moderation.
 
 **Notice:** This is not an official OpenAI project nor is it affiliated with
 OpenAI in any way.
 
 ## Usage
 
+This library is available on the [clojars](https://clojars.org) repository. Refer to
+the link in the image below for instructions on how to add it as a dependency to a
+Clojure project.
+
+[![Clojars Project](https://img.shields.io/clojars/v/me.pmatiello/openai-api.svg)](https://clojars.org/me.pmatiello/openai-api)
+
 The functions for interacting with the OpenAI API are located in the 
-`pmatiello.openai-api.api` namespace. An API key is required for usage.
+`me.pmatiello.openai-api.api` namespace. An API key is required for usage.
 
 ```clj
 (require '[me.pmatiello.openai-api.api :as openai])
