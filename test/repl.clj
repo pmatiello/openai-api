@@ -6,64 +6,76 @@
 
 (stest/instrument)
 
+; Credentials
 (def ^:private api-key
   (or (System/getenv "OPENAI_API_KEY") (read-line)))
 
 (def credentials
   (openai/credentials api-key))
 
+; Models
 (openai/models credentials)
 (s/valid? :pmatiello.openai-api.specs.model/description-list *1)
 
 (openai/model "gpt-3.5-turbo" credentials)
 (s/valid? :pmatiello.openai-api.specs.model/description *1)
 
-(openai/completion {:model "ada" :prompt "hello"} credentials)
+; Completions
+(openai/completion {:model  "ada"
+                    :prompt "hello"}
+                   credentials)
 (s/valid? :pmatiello.openai-api.specs.completion/result *1)
 
-(openai/chat {:model "gpt-3.5-turbo"
-           :messages [{:role "user" :content "(println \"hello"}]}
+; Chat
+(openai/chat {:model    "gpt-3.5-turbo"
+              :messages [{:role "user" :content "(println \"hello"}]}
              credentials)
 (s/valid? :pmatiello.openai-api.specs.chat/result *1)
 
-(openai/edit {:model    "code-davinci-edit-001"
-           :instruction "Fix clojure code."
-           :input       "(println \"hello)"}
+; Edits
+(openai/edit {:model       "code-davinci-edit-001"
+              :instruction "Fix clojure code."
+              :input       "(println \"hello)"}
              credentials)
 (s/valid? :pmatiello.openai-api.specs.edit/result *1)
 
-(openai/image-generation {:prompt       "brick wall"
-                       :response-format "url"}
+; Images
+(openai/image-generation {:prompt          "brick wall"
+                          :response-format "url"}
                          credentials)
 (s/valid? :pmatiello.openai-api.specs.image/result *1)
 
-(openai/image-edit {:image        (io/file "test/fixtures/image.png")
-                 :mask            (io/file "test/fixtures/mask.png")
-                 :prompt          "brick wall with a graffiti"
-                 :response-format "url"}
+(openai/image-edit {:image           (io/file "test/fixtures/image.png")
+                    :mask            (io/file "test/fixtures/mask.png")
+                    :prompt          "brick wall with a graffiti"
+                    :response-format "url"}
                    credentials)
 (s/valid? :pmatiello.openai-api.specs.image/result *1)
 
-(openai/image-variation {:image (io/file "test/fixtures/image.png")} credentials)
+(openai/image-variation {:image (io/file "test/fixtures/image.png")}
+                        credentials)
 (s/valid? :pmatiello.openai-api.specs.image/result *1)
 
+; Embeddings
 (openai/embedding {:model "text-embedding-ada-002"
-                :input    "brick wall"}
+                   :input "brick wall"}
                   credentials)
 (s/valid? :pmatiello.openai-api.specs.embedding/result *1)
 
+; Audio
 (openai/audio-transcription {:model "whisper-1"
-                          :file     (io/file "test/fixtures/audio.m4a")}
+                             :file  (io/file "test/fixtures/audio.m4a")}
                             credentials)
 (s/valid? :pmatiello.openai-api.specs.audio/result *1)
 
 (openai/audio-translation {:model "whisper-1"
-                        :file     (io/file "test/fixtures/audio-pt.m4a")}
+                           :file  (io/file "test/fixtures/audio-pt.m4a")}
                           credentials)
 (s/valid? :pmatiello.openai-api.specs.audio/result *1)
 
-(openai/file-upload! {:file (io/file "test/fixtures/colors.txt")
-                   :purpose "fine-tune"}
+; Files
+(openai/file-upload! {:file    (io/file "test/fixtures/colors.txt")
+                      :purpose "fine-tune"}
                      credentials)
 (s/valid? :pmatiello.openai-api.specs.file/upload-result *1)
 
@@ -78,6 +90,7 @@
 (openai/file-delete! (-> credentials openai/files :data first :id) credentials)
 (s/valid? :pmatiello.openai-api.specs.file/delete-result *1)
 
+; Fine-tunes
 (openai/fine-tune-create!
   {:training-file (->> credentials openai/files :data
                        (filter #(-> % :filename #{"colors.txt"}))
@@ -110,6 +123,7 @@
   credentials)
 (s/valid? :pmatiello.openai-api.specs.fine-tune/delete-result *1)
 
+; Moderation
 (openai/moderation {:input "kittens"} credentials)
 (s/valid? :pmatiello.openai-api.specs.moderation/classification *1)
 
