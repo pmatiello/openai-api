@@ -1,4 +1,4 @@
-(ns me.pmatiello.openai-api.internal.http
+(ns ^:no-doc me.pmatiello.openai-api.internal.http
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [clojure.spec.alpha :as s]
