@@ -36,6 +36,8 @@ Refer to the function specs and the official
 [OpenAI API reference](https://platform.openai.com/docs/api-reference) for details
 about the parameters required for these functions.
 
+Usage examples are available in the [test/repl.clj](test/repl.clj) file.
+
 ## Development
 
 Information for developing this library.
