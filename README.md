@@ -18,7 +18,19 @@ Clojure project.
 [![Clojars Project](https://img.shields.io/clojars/v/me.pmatiello/openai-api.svg)](https://clojars.org/me.pmatiello/openai-api)
 
 The functions for interacting with the OpenAI API are located in the 
-`me.pmatiello.openai-api.api` namespace. An API key is required for usage.
+`me.pmatiello.openai-api.api` namespace.
+
+Refer to the specs for the functions in this namespace and to the official
+[OpenAI API reference](https://platform.openai.com/docs/api-reference) for details
+about the parameters required for these functions.
+
+Calls to the OpenAI API require a `credentials` parameter, which can be produced 
+using the `me.pmatiello.openai-api.api/credentials` function. A valid OpenAI API key
+is required as an argument.
+
+### Example
+
+The code below requests a chat completion from the OpenAI API.
 
 ```clj
 (require '[me.pmatiello.openai-api.api :as openai])
@@ -32,11 +44,7 @@ The functions for interacting with the OpenAI API are located in the
              credentials)
 ```
 
-Refer to the function specs and the official
-[OpenAI API reference](https://platform.openai.com/docs/api-reference) for details
-about the parameters required for these functions.
-
-Usage examples are available in the [test/repl.clj](test/repl.clj) file.
+More examples are available in the [test/repl.clj](test/repl.clj) file.
 
 ## Development
 
