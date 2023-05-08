@@ -3,31 +3,40 @@
             [clojure.data.json :as json]
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
-            [me.pmatiello.openai-api.specs.credentials :as specs.credentials])
+            [me.pmatiello.openai-api.specs.config :as specs.config])
   (:import (java.io File)))
 
 (s/def ::api-response
   (s/or :map map?
         :string string?))
-(s/def ::endpoint string?)
 (s/def ::body map?)
+(s/def ::http-headers map?)
 (s/def ::multipart map?)
 (s/def ::parse? boolean?)
+(s/def ::path string?)
+(s/def ::url string?)
 (s/def ::options
   (s/keys* :opt-un [::parse?]))
 (s/def ::params
   (s/keys ::opt-un [::body ::multipart]))
-(s/def ::http-headers map?)
 
-(defn ^:private credentials->headers
+(defn config+path->url [config path]
+  (str (:base-url config) path))
+
+(s/fdef config+path->url
+  :args (s/cat :config ::specs.config/config
+               :path ::path)
+  :ret ::url)
+
+(defn ^:private config->headers
   [{:keys [api-key org-id]}]
   (if org-id
     {"Authorization"       (str "Bearer " api-key)
      "OpenAI-Organization" org-id}
     {"Authorization" (str "Bearer " api-key)}))
 
-(s/fdef credentials->headers
-  :args (s/cat :credentials ::specs.credentials/credentials)
+(s/fdef config->headers
+  :args (s/cat :config ::specs.config/config)
   :ret ::http-headers)
 
 (defn ^:private json->clj-keys
@@ -43,18 +52,19 @@
       (str/replace #"-" "_")))
 
 (defn get!
-  [endpoint credentials & {:as options}]
-  (let [options  (merge {:parse? true} options)
-        headers  (credentials->headers credentials)
-        response (client/get endpoint {:headers headers})
-        body     (:body response)]
+  [path config & {:as options}]
+  (let [url      (config+path->url config path)
+        headers  (config->headers config)
+        response (client/get url {:headers headers})
+        body     (:body response)
+        options  (merge {:parse? true} options)]
     (if (:parse? options)
       (json/read-str body {:key-fn json->clj-keys})
       body)))
 
 (s/fdef get!
-  :args (s/cat :endpoint ::endpoint
-               :credentials ::specs.credentials/credentials
+  :args (s/cat :path ::path
+               :config ::specs.config/config
                :options ::options)
   :ret ::api-response)
 
@@ -81,28 +91,30 @@
     (merge req-map {:multipart (mapv ->part multipart)})
     req-map))
 
-(defn post! [endpoint params credentials]
-  (let [headers  (credentials->headers credentials)
+(defn post! [path params config]
+  (let [url      (config+path->url config path)
+        headers  (config->headers config)
         req-map  (-> {}
                      (with-headers headers)
                      (with-body params)
                      (with-multipart params))
-        response (client/post endpoint req-map)]
+        response (client/post url req-map)]
     (json/read-str (:body response) {:key-fn json->clj-keys})))
 
 (s/fdef post!
-  :args (s/cat :endpoint ::endpoint
+  :args (s/cat :path ::path
                :params ::params
-               :credentials ::specs.credentials/credentials)
+               :config ::specs.config/config)
   :ret ::api-response)
 
 (defn delete!
-  [endpoint credentials]
-  (let [headers  (credentials->headers credentials)
-        response (client/delete endpoint {:headers headers})]
+  [path config]
+  (let [url      (config+path->url config path)
+        headers  (config->headers config)
+        response (client/delete url {:headers headers})]
     (json/read-str (:body response) {:key-fn json->clj-keys})))
 
 (s/fdef delete!
-  :args (s/cat :endpoint ::endpoint
-               :credentials ::specs.credentials/credentials)
+  :args (s/cat :path ::path
+               :config ::specs.config/config)
   :ret ::api-response)

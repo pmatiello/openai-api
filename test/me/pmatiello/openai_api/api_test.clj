@@ -4,168 +4,177 @@
             [me.pmatiello.openai-api.api :as api]
             [me.pmatiello.openai-api.internal.http :as http]))
 
-(mfn/deftest credentials-test
-  (mfn/testing "returns credentials for API key"
-    (is (= {:api-key "my-api-key"}
-           (api/credentials "my-api-key"))))
+(mfn/deftest config-test
+  (mfn/testing "returns config with API key, including a default base-url"
+    (is (= {:api-key  "my-api-key"
+            :base-url "https://api.openai.com"}
+           (api/config :api-key "my-api-key"))))
 
-  (mfn/testing "returns credentials for API key and organisation id"
-    (is (= {:api-key "my-api-key"
-            :org-id  "my-org-id"}
-           (api/credentials "my-api-key" "my-org-id")))))
+  (mfn/testing "returns config with API key and organisation id"
+    (is (= {:api-key  "my-api-key"
+            :org-id   "my-org-id"
+            :base-url "https://api.openai.com"}
+           (api/config :api-key "my-api-key"
+                       :org-id "my-org-id"))))
+
+  (mfn/testing "returns config with overriden base-url"
+    (is (= {:api-key  "my-api-key"
+            :base-url "https://api.not-openai.com"}
+           (api/config :api-key "my-api-key"
+                       :base-url "https://api.not-openai.com")))))
 
 (mfn/deftest models-test
   (mfn/testing "retrieves list of models"
-    (is (= 'response (api/models 'credentials)))
+    (is (= 'response (api/models 'config)))
     (mfn/providing
-      (http/get! "https://api.openai.com/v1/models" 'credentials) 'response)))
+      (http/get! "/v1/models" 'config) 'response)))
 
 (mfn/deftest model-test
   (mfn/testing "retrieves the given model"
-    (is (= 'response (api/model 'model 'credentials)))
+    (is (= 'response (api/model 'model 'config)))
     (mfn/providing
-      (http/get! "https://api.openai.com/v1/models/model" 'credentials) 'response)))
+      (http/get! "/v1/models/model" 'config) 'response)))
 
 
 (mfn/deftest completion-test
   (mfn/testing "retrieves completion"
-    (is (= 'response (api/completion 'params 'credentials)))
+    (is (= 'response (api/completion 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/completions"
-                  {:body 'params} 'credentials) 'response)))
+      (http/post! "/v1/completions"
+                  {:body 'params} 'config) 'response)))
 
 (mfn/deftest chat-test
   (mfn/testing "retrieves completion"
-    (is (= 'response (api/chat 'params 'credentials)))
+    (is (= 'response (api/chat 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/chat/completions"
-                  {:body 'params} 'credentials) 'response)))
+      (http/post! "/v1/chat/completions"
+                  {:body 'params} 'config) 'response)))
 
 (mfn/deftest edit-test
   (mfn/testing "retrieves edit"
-    (is (= 'response (api/edit 'params 'credentials)))
+    (is (= 'response (api/edit 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/edits"
-                  {:body 'params} 'credentials) 'response)))
+      (http/post! "/v1/edits"
+                  {:body 'params} 'config) 'response)))
 
 (mfn/deftest image-generation-test
   (mfn/testing "retrieves a generated image"
-    (is (= 'response (api/image-generation 'params 'credentials)))
+    (is (= 'response (api/image-generation 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/images/generations"
-                  {:body 'params} 'credentials) 'response)))
+      (http/post! "/v1/images/generations"
+                  {:body 'params} 'config) 'response)))
 
 (mfn/deftest image-edit-test
   (mfn/testing "retrieves an edited image"
-    (is (= 'response (api/image-edit 'params 'credentials)))
+    (is (= 'response (api/image-edit 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/images/edits"
-                  {:multipart 'params} 'credentials) 'response)))
+      (http/post! "/v1/images/edits"
+                  {:multipart 'params} 'config) 'response)))
 
 (deftest image-variation-test
   (mfn/testing "retrieves an image variation"
-    (is (= 'response (api/image-variation 'params 'credentials)))
+    (is (= 'response (api/image-variation 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/images/variations"
-                  {:multipart 'params} 'credentials) 'response)))
+      (http/post! "/v1/images/variations"
+                  {:multipart 'params} 'config) 'response)))
 
 (deftest embedding-test
   (mfn/testing "retrieves embedding"
-    (is (= 'response (api/embedding 'params 'credentials)))
+    (is (= 'response (api/embedding 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/embeddings"
-                  {:body 'params} 'credentials) 'response)))
+      (http/post! "/v1/embeddings"
+                  {:body 'params} 'config) 'response)))
 
 (deftest audio-transcription-test
   (mfn/testing "retrieves an audio transcription"
-    (is (= 'response (api/audio-transcription 'params 'credentials)))
+    (is (= 'response (api/audio-transcription 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/audio/transcriptions"
-                  {:multipart 'params} 'credentials) 'response)))
+      (http/post! "/v1/audio/transcriptions"
+                  {:multipart 'params} 'config) 'response)))
 
 (deftest audio-translation-test
   (mfn/testing "retrieves an audio translation"
-    (is (= 'response (api/audio-translation 'params 'credentials)))
+    (is (= 'response (api/audio-translation 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/audio/translations"
-                  {:multipart 'params} 'credentials) 'response)))
+      (http/post! "/v1/audio/translations"
+                  {:multipart 'params} 'config) 'response)))
 
 (deftest files-test
   (mfn/testing "retrieves list of files"
-    (is (= 'response (api/files 'credentials)))
+    (is (= 'response (api/files 'config)))
     (mfn/providing
-      (http/get! "https://api.openai.com/v1/files" 'credentials) 'response)))
+      (http/get! "/v1/files" 'config) 'response)))
 
 (deftest file-test
   (mfn/testing "retrieve file"
-    (is (= 'response (api/file 'id 'credentials)))
+    (is (= 'response (api/file 'id 'config)))
     (mfn/providing
-      (http/get! "https://api.openai.com/v1/files/id" 'credentials) 'response)))
+      (http/get! "/v1/files/id" 'config) 'response)))
 
 (deftest file-content-test
   (mfn/testing "retrieve file"
-    (is (= 'response (api/file-content 'id 'credentials)))
+    (is (= 'response (api/file-content 'id 'config)))
     (mfn/providing
-      (http/get! "https://api.openai.com/v1/files/id/content"
-                 'credentials {:parse? false}) 'response)))
+      (http/get! "/v1/files/id/content"
+                 'config {:parse? false}) 'response)))
 
 (deftest file-upload!-test
   (mfn/testing "uploads a file"
-    (is (= 'response (api/file-upload! 'params 'credentials)))
+    (is (= 'response (api/file-upload! 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/files"
-                  {:multipart 'params} 'credentials) 'response)))
+      (http/post! "/v1/files"
+                  {:multipart 'params} 'config) 'response)))
 
 (deftest file-delete!-test
   (mfn/testing "deletes the given file"
-    (is (= 'response (api/file-delete! 'id 'credentials)))
+    (is (= 'response (api/file-delete! 'id 'config)))
     (mfn/providing
-      (http/delete! "https://api.openai.com/v1/files/id" 'credentials) 'response)))
+      (http/delete! "/v1/files/id" 'config) 'response)))
 
 (mfn/deftest fine-tunes-test
   (mfn/testing "retrieves list of fine-tunes"
-    (is (= 'response (api/fine-tunes 'credentials)))
+    (is (= 'response (api/fine-tunes 'config)))
     (mfn/providing
-      (http/get! "https://api.openai.com/v1/fine-tunes" 'credentials) 'response)))
+      (http/get! "/v1/fine-tunes" 'config) 'response)))
 
 (deftest fine-tune-test
   (mfn/testing "retrieves a fine-tune"
-    (is (= 'response (api/fine-tune 'id 'credentials)))
+    (is (= 'response (api/fine-tune 'id 'config)))
     (mfn/providing
-      (http/get! "https://api.openai.com/v1/fine-tunes/id" 'credentials)
+      (http/get! "/v1/fine-tunes/id" 'config)
       'response)))
 
 (deftest fine-tune-events-test
   (mfn/testing "retrieves events for a fine-tune"
-    (is (= 'response (api/fine-tune-events 'id 'credentials)))
+    (is (= 'response (api/fine-tune-events 'id 'config)))
     (mfn/providing
-      (http/get! "https://api.openai.com/v1/fine-tunes/id/events" 'credentials)
+      (http/get! "/v1/fine-tunes/id/events" 'config)
       'response)))
 
 (deftest fine-tune-create!-test
   (mfn/testing "creates a fine-tuned model"
-    (is (= 'response (api/fine-tune-create! 'params 'credentials)))
+    (is (= 'response (api/fine-tune-create! 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/fine-tunes"
-                  {:body 'params} 'credentials) 'response)))
+      (http/post! "/v1/fine-tunes"
+                  {:body 'params} 'config) 'response)))
 
 (deftest fine-tune-cancel!-test
   (mfn/testing "cancels a fine-tune job"
-    (is (= 'response (api/fine-tune-cancel! 'id 'credentials)))
+    (is (= 'response (api/fine-tune-cancel! 'id 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/fine-tunes/id/cancel"
-                  {} 'credentials) 'response)))
+      (http/post! "/v1/fine-tunes/id/cancel"
+                  {} 'config) 'response)))
 
 (deftest fine-tune-delete!-test
   (mfn/testing "deletes a fine-tuned model"
-    (is (= 'response (api/fine-tune-delete! 'model 'credentials)))
+    (is (= 'response (api/fine-tune-delete! 'model 'config)))
     (mfn/providing
-      (http/delete! "https://api.openai.com/v1/models/model"
-                    'credentials) 'response)))
+      (http/delete! "/v1/models/model"
+                    'config) 'response)))
 
 (deftest moderation-test
   (mfn/testing "retrieves moderation classification for input"
-    (is (= 'response (api/moderation 'params 'credentials)))
+    (is (= 'response (api/moderation 'params 'config)))
     (mfn/providing
-      (http/post! "https://api.openai.com/v1/moderations"
-                  {:body 'params} 'credentials) 'response)))
+      (http/post! "/v1/moderations"
+                  {:body 'params} 'config) 'response)))
