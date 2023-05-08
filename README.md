@@ -24,8 +24,8 @@ Refer to the specs for the functions in this namespace and to the official
 [OpenAI API reference](https://platform.openai.com/docs/api-reference) for details
 about the parameters required for these functions.
 
-Calls to the OpenAI API require a `credentials` parameter, which can be produced 
-using the `me.pmatiello.openai-api.api/credentials` function. A valid OpenAI API key
+Calls to the OpenAI API require a `config` parameter, which can be produced 
+using the `me.pmatiello.openai-api.api/config` function. A valid OpenAI API key
 is required as an argument.
 
 ### Example
@@ -35,13 +35,13 @@ The code below requests a chat completion from the OpenAI API.
 ```clj
 (require '[me.pmatiello.openai-api.api :as openai])
 
-(def credentials
-  (openai/credentials api-key))
+(def config
+  (openai/config :api-key api-key))
 
 (openai/chat {:model    "gpt-3.5-turbo"
               :messages [{:role    "user"
                           :content "Fix: (println \"hello"}]}
-             credentials)
+             config)
 ```
 
 More examples are available in the [test/repl.clj](test/repl.clj) file.
