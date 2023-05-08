@@ -6,136 +6,138 @@
 
 (stest/instrument)
 
-; Credentials
+; Config
 (def ^:private api-key
   (or (System/getenv "OPENAI_API_KEY") (read-line)))
 
-(def credentials
-  (openai/credentials api-key))
+(def config
+  (openai/config :api-key api-key))
+(s/valid? :me.pmatiello.openai-api.specs.config/config config)
 
 ; Models
-(openai/models credentials)
-(s/valid? :pmatiello.openai-api.specs.model/description-list *1)
+(openai/models config)
+(s/valid? :me.pmatiello.openai-api.specs.model/description-list *1)
 
-(openai/model "gpt-3.5-turbo" credentials)
-(s/valid? :pmatiello.openai-api.specs.model/description *1)
+(openai/model "gpt-3.5-turbo" config)
+(s/valid? :me.pmatiello.openai-api.specs.model/description *1)
 
 ; Completions
 (openai/completion {:model  "ada"
                     :prompt "hello"}
-                   credentials)
-(s/valid? :pmatiello.openai-api.specs.completion/result *1)
+                   config)
+(s/valid? :me.pmatiello.openai-api.specs.completion/result *1)
 
 ; Chat
 (openai/chat {:model    "gpt-3.5-turbo"
               :messages [{:role "user" :content "(println \"hello"}]}
-             credentials)
-(s/valid? :pmatiello.openai-api.specs.chat/result *1)
+             config)
+(s/valid? :me.pmatiello.openai-api.specs.chat/result *1)
 
 ; Edits
 (openai/edit {:model       "code-davinci-edit-001"
               :instruction "Fix clojure code."
               :input       "(println \"hello)"}
-             credentials)
-(s/valid? :pmatiello.openai-api.specs.edit/result *1)
+             config)
+(s/valid? :me.pmatiello.openai-api.specs.edit/result *1)
 
 ; Images
 (openai/image-generation {:prompt          "brick wall"
                           :response-format "url"}
-                         credentials)
-(s/valid? :pmatiello.openai-api.specs.image/result *1)
+                         config)
+(s/valid? :me.pmatiello.openai-api.specs.image/result *1)
 
 (openai/image-edit {:image           (io/file "test/fixtures/image.png")
                     :mask            (io/file "test/fixtures/mask.png")
                     :prompt          "brick wall with a graffiti"
                     :response-format "url"}
-                   credentials)
-(s/valid? :pmatiello.openai-api.specs.image/result *1)
+                   config)
+(s/valid? :me.pmatiello.openai-api.specs.image/result *1)
 
 (openai/image-variation {:image (io/file "test/fixtures/image.png")}
-                        credentials)
-(s/valid? :pmatiello.openai-api.specs.image/result *1)
+                        config)
+(s/valid? :me.pmatiello.openai-api.specs.image/result *1)
 
 ; Embeddings
 (openai/embedding {:model "text-embedding-ada-002"
                    :input "brick wall"}
-                  credentials)
-(s/valid? :pmatiello.openai-api.specs.embedding/result *1)
+                  config)
+(s/valid? :me.pmatiello.openai-api.specs.embedding/result *1)
 
 ; Audio
 (openai/audio-transcription {:model "whisper-1"
                              :file  (io/file "test/fixtures/audio.m4a")}
-                            credentials)
-(s/valid? :pmatiello.openai-api.specs.audio/result *1)
+                            config)
+(s/valid? :me.pmatiello.openai-api.specs.audio/result *1)
 
 (openai/audio-translation {:model "whisper-1"
                            :file  (io/file "test/fixtures/audio-pt.m4a")}
-                          credentials)
-(s/valid? :pmatiello.openai-api.specs.audio/result *1)
+                          config)
+(s/valid? :me.pmatiello.openai-api.specs.audio/result *1)
 
 ; Files
 (openai/file-upload! {:file    (io/file "test/fixtures/colors.txt")
                       :purpose "fine-tune"}
-                     credentials)
-(s/valid? :pmatiello.openai-api.specs.file/upload-result *1)
+                     config)
+(s/valid? :me.pmatiello.openai-api.specs.file/upload-result *1)
 
-(openai/files credentials)
-(s/valid? :pmatiello.openai-api.specs.file/description-list *1)
+(openai/files config)
+(s/valid? :me.pmatiello.openai-api.specs.file/description-list *1)
 
-(openai/file (-> credentials openai/files :data first :id) credentials)
+(openai/file (-> config openai/files :data first :id) config)
+(s/valid? :me.pmatiello.openai-api.specs.file/result *1)
 
-(openai/file-content (-> credentials openai/files :data first :id) credentials)
+(openai/file-content (-> config openai/files :data first :id) config)
 (s/valid? string? *1)
 
-(openai/file-delete! (-> credentials openai/files :data first :id) credentials)
-(s/valid? :pmatiello.openai-api.specs.file/delete-result *1)
+(openai/file-delete! (-> config openai/files :data first :id) config)
+(s/valid? :me.pmatiello.openai-api.specs.file/delete-result *1)
 
 ; Fine-tunes
 (openai/fine-tune-create!
-  {:training-file (->> credentials openai/files :data
+  {:training-file (->> config openai/files :data
                        (filter #(-> % :filename #{"colors.txt"}))
                        first :id)
    :model         "ada"}
-  credentials)
-(s/valid? :pmatiello.openai-api.specs.fine-tune/description *1)
+  config)
+(s/valid? :me.pmatiello.openai-api.specs.fine-tune/description *1)
 
-(openai/fine-tunes credentials)
-(s/valid? :pmatiello.openai-api.specs.fine-tune/description-list *1)
+(openai/fine-tunes config)
+(s/valid? :me.pmatiello.openai-api.specs.fine-tune/description-list *1)
 
 (openai/fine-tune
-  (-> credentials openai/fine-tunes :data last :id)
-  credentials)
-(s/valid? :pmatiello.openai-api.specs.fine-tune/description *1)
+  (-> config openai/fine-tunes :data last :id)
+  config)
+(s/valid? :me.pmatiello.openai-api.specs.fine-tune/description *1)
 
 (openai/fine-tune-events
-  (-> credentials openai/fine-tunes :data last :id)
-  credentials)
-(s/valid? :pmatiello.openai-api.specs.fine-tune/event-list *1)
+  (-> config openai/fine-tunes :data last :id)
+  config)
+(s/valid? :me.pmatiello.openai-api.specs.fine-tune/event-list *1)
 
 (openai/fine-tune-cancel!
-  (-> credentials openai/fine-tunes :data last :id)
-  credentials)
-(s/valid? :pmatiello.openai-api.specs.fine-tune/description *1)
+  (-> config openai/fine-tunes :data last :id)
+  config)
+(s/valid? :me.pmatiello.openai-api.specs.fine-tune/description *1)
 
 (openai/fine-tune-delete!
-  (->> credentials openai/models :data
+  (->> config openai/models :data
        (filter #(->> % :owned-by (re-matches #"user-.*"))) last :id)
-  credentials)
-(s/valid? :pmatiello.openai-api.specs.fine-tune/delete-result *1)
+  config)
+(s/valid? :me.pmatiello.openai-api.specs.fine-tune/delete-result *1)
 
 ; Moderation
-(openai/moderation {:input "kittens"} credentials)
-(s/valid? :pmatiello.openai-api.specs.moderation/classification *1)
+(openai/moderation {:input "kittens"} config)
+(s/valid? :me.pmatiello.openai-api.specs.moderation/classification *1)
 
 (comment
   "cleanup"
 
   "WARNING: deletes all files in the account"
-  (doseq [each (->> credentials openai/files :data (map :id))]
-    (openai/file-delete! each credentials))
+  (doseq [each (->> config openai/files :data (map :id))]
+    (openai/file-delete! each config))
 
   "WARNING: deletes all user's fine-tuned models in the account"
-  (doseq [each (->> credentials openai/models :data
+  (doseq [each (->> config openai/models :data
                     (filter #(->> % :owned-by (re-matches #"user-.*")))
                     (map :id))]
-    (openai/fine-tune-delete! each credentials)))
+    (openai/fine-tune-delete! each config)))
