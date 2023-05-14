@@ -129,6 +129,11 @@
 (openai/moderation {:input "kittens"} config)
 (s/valid? :me.pmatiello.openai-api.specs.moderation/classification *1)
 
+; Timeout
+(openai/models (merge config {:http-opts {:connection-timeout 2500
+                                          :socket-timeout     2500}}))
+(s/valid? :me.pmatiello.openai-api.specs.model/description-list *1)
+
 (comment
   "cleanup"
 

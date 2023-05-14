@@ -91,7 +91,7 @@
       (client/delete "base-url/path" {:headers headers})
       {:status 200 :body "{\"data\":\"ok\"}"})))
 
-(mfn/deftest headers-test
+(mfn/deftest authorization-test
   (mfn/testing "includes api-key header"
     (http/get! 'path config)
     (mfn/providing
@@ -105,4 +105,24 @@
       (client/get (mockfn.matchers/any)
                   {:headers {"Authorization"       "Bearer api-key"
                              "OpenAI-Organization" "org-id"}})
+      {:status 200 :body "{}"})))
+
+(mfn/deftest http-opts-test
+  (mfn/testing "includes timeout settings"
+    (http/get! 'path
+               (merge config
+                      {:http-opts {:connection-timeout 2500 :socket-timeout 2500}}))
+    (mfn/providing
+      (client/get (mockfn.matchers/any)
+                  {:headers            {"Authorization" "Bearer api-key"}
+                   :connection-timeout 2500
+                   :socket-timeout     2500})
+      {:status 200 :body "{}"}))
+
+  (mfn/testing "ignores unknown settings"
+    (http/get! 'path
+               (merge config {:http-opts {:unknown "unknown"}}))
+    (mfn/providing
+      (client/get (mockfn.matchers/any)
+                  {:headers {"Authorization" "Bearer api-key"}})
       {:status 200 :body "{}"})))

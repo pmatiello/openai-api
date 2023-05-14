@@ -21,7 +21,16 @@
     (is (= {:api-key  "my-api-key"
             :base-url "https://api.not-openai.com"}
            (api/config :api-key "my-api-key"
-                       :base-url "https://api.not-openai.com")))))
+                       :base-url "https://api.not-openai.com"))))
+
+  (mfn/testing "returns config with custom http options"
+    (is (= {:api-key   "my-api-key"
+            :base-url  "https://api.openai.com"
+            :http-opts {:connection-timeout 2500
+                        :socket-timeout     2500}}
+           (api/config :api-key "my-api-key"
+                       :http-opts {:connection-timeout 2500
+                                   :socket-timeout     2500})))))
 
 (mfn/deftest models-test
   (mfn/testing "retrieves list of models"

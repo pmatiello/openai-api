@@ -14,6 +14,7 @@
 (s/def ::multipart map?)
 (s/def ::parse? boolean?)
 (s/def ::path string?)
+(s/def ::req-map map?)
 (s/def ::url string?)
 (s/def ::options
   (s/keys* :opt-un [::parse?]))
@@ -39,6 +40,31 @@
   :args (s/cat :config ::specs.config/config)
   :ret ::http-headers)
 
+(defn ^:private with-headers
+  [req-map config]
+  (merge req-map {:headers (config->headers config)}))
+
+(s/fdef with-headers
+  :args (s/cat :req map? :config ::specs.config/config)
+  :ret ::req-map)
+
+(defn ^:private config->http-opts [config]
+  (-> config
+      :http-opts
+      (select-keys [:connection-timeout :socket-timeout])))
+
+(s/fdef config->http-opts
+  :args (s/cat :config ::specs.config/config)
+  :ret ::specs.config/http-opts)
+
+(defn ^:private with-http-opts
+  [req-map config]
+  (merge req-map (config->http-opts config)))
+
+(s/fdef with-http-opts
+  :args (s/cat :req map? :config ::specs.config/config)
+  :ret ::req-map)
+
 (defn ^:private json->clj-keys
   [orig-key]
   (-> orig-key
@@ -54,8 +80,10 @@
 (defn get!
   [path config & {:as options}]
   (let [url      (config+path->url config path)
-        headers  (config->headers config)
-        response (client/get url {:headers headers})
+        req-map  (-> {}
+                     (with-headers config)
+                     (with-http-opts config))
+        response (client/get url req-map)
         body     (:body response)
         options  (merge {:parse? true} options)]
     (if (:parse? options)
@@ -67,10 +95,6 @@
                :config ::specs.config/config
                :options ::options)
   :ret ::api-response)
-
-(defn ^:private with-headers
-  [req-map headers]
-  (merge req-map {:headers headers}))
 
 (defn ^:private with-body
   [req-map {:keys [body]}]
@@ -93,9 +117,9 @@
 
 (defn post! [path params config]
   (let [url      (config+path->url config path)
-        headers  (config->headers config)
         req-map  (-> {}
-                     (with-headers headers)
+                     (with-headers config)
+                     (with-http-opts config)
                      (with-body params)
                      (with-multipart params))
         response (client/post url req-map)]
@@ -110,8 +134,10 @@
 (defn delete!
   [path config]
   (let [url      (config+path->url config path)
-        headers  (config->headers config)
-        response (client/delete url {:headers headers})]
+        req-map  (-> {}
+                     (with-headers config)
+                     (with-http-opts config))
+        response (client/delete url req-map)]
     (json/read-str (:body response) {:key-fn json->clj-keys})))
 
 (s/fdef delete!
