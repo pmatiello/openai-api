@@ -2,6 +2,10 @@
 
 Notable changes to this project are documented in this file.
 
+# v0.3.0
+**Released at:** 2023-05-15.
+- Adds support for specifying connection and socket timeouts.
+
 # v0.2.0
 **Released at:** 2023-05-09.
 - Adds support for custom base-url for accessing the API.
