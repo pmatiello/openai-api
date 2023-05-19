@@ -4,7 +4,7 @@ Notable changes to this project are documented in this file.
 
 ## v0.3.1
 **Released at:** 2023-05-19.
-- Fix changelog formatting.
+- Fixes changelog formatting.
 
 ## v0.3.0
 **Released at:** 2023-05-15.
