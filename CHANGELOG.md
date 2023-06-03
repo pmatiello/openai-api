@@ -2,6 +2,9 @@
 
 Notable changes to this project are documented in this file.
 
+## Unreleased
+- Adds examples to function docstrings.
+
 ## v0.3.1
 **Released at:** 2023-05-19.
 - Fixes changelog formatting.
