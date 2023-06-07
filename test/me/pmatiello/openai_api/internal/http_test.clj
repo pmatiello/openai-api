@@ -108,7 +108,7 @@
                              "OpenAI-Organization" "org-id"}})
       {:status 200 :body "{}"})))
 
-(mfn/deftest http-opts-test
+(mfn/deftest config-http-opts-test
   (mfn/testing "includes timeout settings"
     (http/get! 'path
                (merge config
@@ -127,3 +127,29 @@
       (client/get (mockfn.matchers/any)
                   {:headers {"Authorization" "Bearer api-key"}})
       {:status 200 :body "{}"})))
+
+(mfn/deftest params-http-opts-test
+  (mfn/testing "includes format settings"
+    (http/post! 'path {:http-opts {:as :stream}} config)
+    (mfn/providing
+      (client/post (mockfn.matchers/any)
+                   {:headers {"Authorization" "Bearer api-key"}
+                    :as      :stream})
+      {:status 200 :body "{}"}))
+
+  (mfn/testing "ignores unknown settings"
+    (http/post! 'path {:http-opts {:unknown :unknown}} config)
+    (mfn/providing
+      (client/post (mockfn.matchers/any)
+                   {:headers {"Authorization" "Bearer api-key"}})
+      {:status 200 :body "{}"})))
+
+(mfn/deftest streaming-test
+  (mfn/testing "returns the response as a stream of smaller responses"
+    (is (= [{:pt 1} {:pt 2}]
+           (http/post! 'path {} config)))
+    (mfn/providing
+      (client/post "base-url/path" (mockfn.matchers/any))
+      {:status 200
+       :body   (->> "data: {\"pt\":1}\n\ndata: {\"pt\":2}\n\ndata: [DONE]"
+                    .getBytes ByteArrayInputStream.)})))
