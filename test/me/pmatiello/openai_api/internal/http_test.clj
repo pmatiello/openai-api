@@ -3,7 +3,8 @@
             [clojure.java.io :as io]
             [clojure.test :refer :all]
             [mockfn.clj-test :as mfn]
-            [me.pmatiello.openai-api.internal.http :as http]))
+            [me.pmatiello.openai-api.internal.http :as http])
+  (:import (java.io ByteArrayInputStream)))
 
 (def ^:private config
   {:api-key "api-key" :base-url "base-url/"})

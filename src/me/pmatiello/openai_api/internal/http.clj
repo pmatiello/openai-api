@@ -1,8 +1,8 @@
 (ns ^:no-doc me.pmatiello.openai-api.internal.http
   (:require [clj-http.client :as client]
-            [clojure.data.json :as json]
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
+            [me.pmatiello.openai-api.internal.json :as json]
             [me.pmatiello.openai-api.specs.config :as specs.config])
   (:import (java.io File)))
 
@@ -65,18 +65,6 @@
   :args (s/cat :req map? :config ::specs.config/config)
   :ret ::req-map)
 
-(defn ^:private json->clj-keys
-  [orig-key]
-  (-> orig-key
-      (str/replace #"_" "-")
-      keyword))
-
-(defn ^:private clj->json-keys
-  [orig-key]
-  (-> orig-key
-      name
-      (str/replace #"-" "_")))
-
 (defn get!
   [path config & {:as options}]
   (let [url      (config+path->url config path)
@@ -87,7 +75,7 @@
         body     (:body response)
         options  (merge {:parse? true} options)]
     (if (:parse? options)
-      (json/read-str body {:key-fn json->clj-keys})
+      (json/read body)
       body)))
 
 (s/fdef get!
@@ -100,13 +88,13 @@
   [req-map {:keys [body]}]
   (if body
     (merge req-map
-           {:body         (json/write-str body {:key-fn clj->json-keys})
+           {:body         (json/write body)
             :content-type :json})
     req-map))
 
 (defn ^:private ->part
   [[k v]]
-  {:name    (clj->json-keys k)
+  {:name    (-> k name (str/replace #"-" "_"))
    :content (if (instance? File v) v (str v))})
 
 (defn ^:private with-multipart
@@ -123,7 +111,7 @@
                      (with-body params)
                      (with-multipart params))
         response (client/post url req-map)]
-    (json/read-str (:body response) {:key-fn json->clj-keys})))
+    (json/read (:body response))))
 
 (s/fdef post!
   :args (s/cat :path ::path
@@ -138,7 +126,7 @@
                      (with-headers config)
                      (with-http-opts config))
         response (client/delete url req-map)]
-    (json/read-str (:body response) {:key-fn json->clj-keys})))
+    (json/read (:body response))))
 
 (s/fdef delete!
   :args (s/cat :path ::path
