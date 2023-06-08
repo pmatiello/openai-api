@@ -2,6 +2,10 @@
 
 Notable changes to this project are documented in this file.
 
+## v0.4.1
+**Released at:** 2023-06-08.
+- Remove internal namespace from cljdoc.
+
 ## v0.4.0
 **Released at:** 2023-06-08.
 - Add support for streaming responses in completion and chat functions.

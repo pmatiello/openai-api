@@ -1,4 +1,4 @@
-(ns me.pmatiello.openai-api.internal.json
+(ns ^:no-doc me.pmatiello.openai-api.internal.json
   (:refer-clojure :exclude [read])
   (:require [clojure.data.json :as json]
             [clojure.string :as str]))
