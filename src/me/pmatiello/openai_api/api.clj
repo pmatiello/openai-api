@@ -66,6 +66,12 @@
                :config ::specs.config/config)
   :ret ::specs.model/description)
 
+(defn ^:private params->http-params
+  [params]
+  (let [body      {:body params}
+        http-opts (when (:stream params) {:http-opts {:as :stream}})]
+    (merge body http-opts)))
+
 (defn completion
   "Generates a completion based on the given parameters.
 
@@ -73,7 +79,8 @@
   (openai/completion {:model \"ada\" :prompt \"hello\"} config)"
   [params config]
   (http/post! "/v1/completions"
-              {:body params} config))
+              (params->http-params params)
+              config))
 
 (s/fdef completion
   :args (s/cat :params ::specs.completion/params
@@ -90,7 +97,8 @@
     config)"
   [params config]
   (http/post! "/v1/chat/completions"
-              {:body params} config))
+              (params->http-params params)
+              config))
 
 (s/fdef chat
   :args (s/cat :params ::specs.chat/params

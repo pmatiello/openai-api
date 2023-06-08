@@ -49,15 +49,29 @@
   (mfn/testing "retrieves completion"
     (is (= 'response (api/completion 'params 'config)))
     (mfn/providing
+      (http/post! "/v1/completions" {:body 'params} 'config) 'response))
+
+  (mfn/testing "streams completion"
+    (is (= 'response (api/completion {:prompt 'prompt :stream true} 'config)))
+    (mfn/providing
       (http/post! "/v1/completions"
-                  {:body 'params} 'config) 'response)))
+                  {:body {:prompt 'prompt :stream true} :http-opts {:as :stream}}
+                  'config)
+      'response)))
 
 (mfn/deftest chat-test
   (mfn/testing "retrieves completion"
     (is (= 'response (api/chat 'params 'config)))
     (mfn/providing
+      (http/post! "/v1/chat/completions" {:body 'params} 'config) 'response))
+
+  (mfn/testing "streams completion"
+    (is (= 'response (api/chat {:messages 'messages :stream true} 'config)))
+    (mfn/providing
       (http/post! "/v1/chat/completions"
-                  {:body 'params} 'config) 'response)))
+                  {:body {:messages 'messages :stream true} :http-opts {:as :stream}}
+                  'config)
+      'response)))
 
 (mfn/deftest edit-test
   (mfn/testing "retrieves edit"

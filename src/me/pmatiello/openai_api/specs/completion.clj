@@ -33,7 +33,7 @@
 (s/def ::id string?)
 (s/def ::object string?)
 
-(s/def ::finish-reason string?)
+(s/def ::finish-reason (s/nilable string?))
 (s/def ::index integer?)
 (s/def ::text string?)
 (s/def ::choice
@@ -47,5 +47,14 @@
 (s/def ::usage
   (s/keys ::req-un [::completion-tokens ::prompt-tokens ::total-tokens]))
 
-(s/def ::result
+(s/def ::result-full
   (s/keys :req-un [::choices ::created ::id ::model ::object ::usage]))
+
+(s/def ::result-stream*
+  (s/keys :req-un [::choices ::created ::id ::model ::object]))
+(s/def ::result-stream
+  (s/coll-of ::result-stream*))
+
+(s/def ::result
+  (s/or :result-full ::result-full
+        :result-stream ::result-stream))

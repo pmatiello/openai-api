@@ -32,10 +32,17 @@
 (s/def ::id string?)
 (s/def ::object string?)
 
-(s/def ::finish-reason string?)
+(s/def ::finish-reason (s/nilable string?))
 (s/def ::index integer?)
-(s/def ::choice
+(s/def ::choice*
   (s/keys :req-un [::finish-reason ::index ::message]))
+(s/def ::delta
+  (s/keys :opt-un [::content ::role]))
+(s/def ::choice-stream*
+  (s/keys :req-un [::finish-reason ::index ::delta]))
+(s/def ::choice
+  (s/or :choice ::choice*
+        :choice-stream ::choice-stream*))
 (s/def ::choices
   (s/coll-of ::choice))
 
@@ -45,5 +52,14 @@
 (s/def ::usage
   (s/keys ::req-un [::completion-tokens ::prompt-tokens ::total-tokens]))
 
-(s/def ::result
+(s/def ::result-full
   (s/keys :req-un [::choices ::created ::id ::model ::object ::usage]))
+
+(s/def ::result-stream*
+  (s/keys :req-un [::choices ::created ::id ::model ::object]))
+(s/def ::result-stream
+  (s/coll-of ::result-stream*))
+
+(s/def ::result
+  (s/or :result-full ::result-full
+        :result-stream ::result-stream))

@@ -7,7 +7,7 @@
   {:model    "gpt-3.5-turbo"
    :messages [{:role "user" :content "(println \"hello"}]})
 
-(def ^:private result
+(def ^:private result-full
   {:id      "chatcmpl-76Sy80A1EGHGXRYuo1014ktROIlt9"
    :object  "chat.completion"
    :created 1681775680
@@ -19,8 +19,28 @@
               :finish-reason "stop"
               :index         0}]})
 
+(def ^:private result-stream
+  [{:id      "chatcmpl-7Ow29AvfwZrGaIRrqVfIR70Dc91ng",
+    :object  "chat.completion.chunk",
+    :created 1686177309,
+    :model   "gpt-3.5-turbo-0301",
+    :choices [{:delta {:role "assistant"}, :index 0, :finish-reason nil}]}
+   {:id      "chatcmpl-7Ow29AvfwZrGaIRrqVfIR70Dc91ng",
+    :object  "chat.completion.chunk",
+    :created 1686177309,
+    :model   "gpt-3.5-turbo-0301",
+    :choices [{:delta {:content "content"}, :index 0, :finish-reason nil}]}
+   {:id      "chatcmpl-7Ow29AvfwZrGaIRrqVfIR70Dc91ng",
+    :object  "chat.completion.chunk",
+    :created 1686177309,
+    :model   "gpt-3.5-turbo-0301",
+    :choices [{:delta {}, :index 0, :finish-reason "stop"}]}])
+
 (deftest params-test
   (is (s/valid? ::specs.chat/params params)))
 
-(deftest result-test
-  (is (s/valid? ::specs.chat/result result)))
+(deftest result-full-test
+  (is (s/valid? ::specs.chat/result result-full)))
+
+(deftest result-stream-test
+  (is (s/valid? ::specs.chat/result result-stream)))

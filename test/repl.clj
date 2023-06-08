@@ -27,9 +27,21 @@
                    config)
 (s/valid? :me.pmatiello.openai-api.specs.completion/result *1)
 
+(openai/completion {:model  "ada"
+                    :prompt "hello"
+                    :stream true}
+                   config)
+(s/valid? :me.pmatiello.openai-api.specs.completion/result *1)
+
 ; Chat
 (openai/chat {:model    "gpt-3.5-turbo"
               :messages [{:role "user" :content "(println \"hello"}]}
+             config)
+(s/valid? :me.pmatiello.openai-api.specs.chat/result *1)
+
+(openai/chat {:model    "gpt-3.5-turbo"
+              :stream   true
+              :messages [{:role "user" :content "hello world program in clojure."}]}
              config)
 (s/valid? :me.pmatiello.openai-api.specs.chat/result *1)
 
