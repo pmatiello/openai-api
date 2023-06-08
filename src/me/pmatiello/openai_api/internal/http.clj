@@ -51,7 +51,7 @@
   (merge req-map {:headers (config->headers config)}))
 
 (s/fdef with-headers
-  :args (s/cat :req map? :config ::specs.config/config)
+  :args (s/cat :req-map ::req-map :config ::specs.config/config)
   :ret ::req-map)
 
 (defn ^:private config->http-opts
@@ -69,7 +69,7 @@
   (merge req-map (config->http-opts config)))
 
 (s/fdef with-config-http-opts
-  :args (s/cat :req map? :config ::specs.config/config)
+  :args (s/cat :req-map ::req-map :config ::specs.config/config)
   :ret ::req-map)
 
 (defn ^:private params->http-opts
@@ -87,7 +87,7 @@
   (merge req-map (params->http-opts params)))
 
 (s/fdef with-params-http-opts
-  :args (s/cat :req map? :params ::params)
+  :args (s/cat :req-map ::req-map :params ::params)
   :ret ::req-map)
 
 (defn ^:private as-api-response [http-response & {:as options}]
@@ -134,6 +134,10 @@
             :content-type :json})
     req-map))
 
+(s/fdef with-body
+  :args (s/cat :req-map ::req-map :params ::params)
+  :ret ::req-map)
+
 (defn ^:private ->part
   [[k v]]
   {:name    (-> k name (str/replace #"-" "_"))
@@ -144,6 +148,10 @@
   (if multipart
     (merge req-map {:multipart (mapv ->part multipart)})
     req-map))
+
+(s/fdef with-multipart
+  :args (s/cat :req-map ::req-map :params ::params)
+  :ret ::req-map)
 
 (defn post! [path params config]
   (let [url      (config+path->url config path)

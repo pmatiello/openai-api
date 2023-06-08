@@ -72,6 +72,10 @@
         http-opts (when (:stream params) {:http-opts {:as :stream}})]
     (merge body http-opts)))
 
+(s/fdef params->http-params
+  :args (s/cat :params map?)
+  :ret ::http/params)
+
 (defn completion
   "Generates a completion based on the given parameters.
 
