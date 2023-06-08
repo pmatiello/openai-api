@@ -13,13 +13,13 @@
             [me.pmatiello.openai-api.specs.chat :as specs.chat]
             [me.pmatiello.openai-api.specs.completion :as specs.completion]
             [me.pmatiello.openai-api.specs.config :as specs.config]
-            [me.pmatiello.openai-api.specs.moderation :as specs.moderation]
             [me.pmatiello.openai-api.specs.edit :as specs.edit]
             [me.pmatiello.openai-api.specs.embedding :as specs.embedding]
             [me.pmatiello.openai-api.specs.file :as specs.file]
             [me.pmatiello.openai-api.specs.fine-tune :as specs.fine-tune]
             [me.pmatiello.openai-api.specs.image :as specs.image]
-            [me.pmatiello.openai-api.specs.model :as specs.model]))
+            [me.pmatiello.openai-api.specs.model :as specs.model]
+            [me.pmatiello.openai-api.specs.moderation :as specs.moderation]))
 
 (defn config
   "Creates a config map for accessing the API.

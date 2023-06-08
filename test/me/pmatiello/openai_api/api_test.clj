@@ -1,8 +1,8 @@
 (ns me.pmatiello.openai-api.api-test
   (:require [clojure.test :refer :all]
-            [mockfn.clj-test :as mfn]
             [me.pmatiello.openai-api.api :as api]
-            [me.pmatiello.openai-api.internal.http :as http]))
+            [me.pmatiello.openai-api.internal.http :as http]
+            [mockfn.clj-test :as mfn]))
 
 (mfn/deftest config-test
   (mfn/testing "returns config with API key, including a default base-url"

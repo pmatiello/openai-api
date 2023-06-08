@@ -2,8 +2,8 @@
   (:require [clj-http.client :as client]
             [clojure.java.io :as io]
             [clojure.test :refer :all]
-            [mockfn.clj-test :as mfn]
-            [me.pmatiello.openai-api.internal.http :as http])
+            [me.pmatiello.openai-api.internal.http :as http]
+            [mockfn.clj-test :as mfn])
   (:import (java.io ByteArrayInputStream)))
 
 (def ^:private config
