@@ -4,6 +4,7 @@ Notable changes to this project are documented in this file.
 
 ## Unreleased
 - Adds examples to function docstrings.
+- Add support for streaming responses in completion and chat functions.
 
 ## v0.3.1
 **Released at:** 2023-05-19.
