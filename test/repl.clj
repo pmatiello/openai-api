@@ -104,6 +104,9 @@
 (openai/file-delete! (-> config openai/files :data first :id) config)
 (s/valid? :me.pmatiello.openai-api.specs.file/delete-result *1)
 
+; Fine-tuning
+(openai/fine-tuning-jobs {} config)
+
 ; Fine-tunes
 (openai/fine-tune-create!
   {:training-file (->> config openai/files :data

@@ -201,3 +201,10 @@
     (mfn/providing
       (http/post! "/v1/moderations"
                   {:body 'params} 'config) 'response)))
+
+(deftest fine-tuning-jobs-test
+  (mfn/testing "retrieves fine tuning jobs"
+    (is (= 'response (api/fine-tuning-jobs 'params 'config)))
+    (mfn/providing
+      (http/get! "/v1/fine_tuning/jobs" 'config {:query-params 'params})
+      'response)))

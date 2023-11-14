@@ -392,3 +392,11 @@
   :args (s/cat :params ::specs.moderation/params
                :config ::specs.config/config)
   :ret ::specs.moderation/classification)
+
+(defn fine-tuning-jobs
+  "List fine-tuning jobs.
+
+  Example:
+  (openai/fine-tuning-jobs {} config)"
+  [params config]
+  (http/get! "/v1/fine_tuning/jobs" config {:query-params params}))
