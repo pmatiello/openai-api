@@ -1,4 +1,4 @@
-(ns me.pmatiello.openai-api.specs.edit
+(ns ^:deprecated me.pmatiello.openai-api.specs.edit
   (:require [clojure.spec.alpha :as s]))
 
 (s/def ::instruction string?)

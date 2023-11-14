@@ -109,7 +109,7 @@
                :config ::specs.config/config)
   :ret ::specs.chat/result)
 
-(defn edit
+(defn ^:deprecated edit
   "Generates an edit based on the given parameters.
 
   Example:
