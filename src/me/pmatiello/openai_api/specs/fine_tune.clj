@@ -1,4 +1,4 @@
-(ns me.pmatiello.openai-api.specs.fine-tune
+(ns ^:deprecated me.pmatiello.openai-api.specs.fine-tune
   (:require [clojure.spec.alpha :as s]
             [me.pmatiello.openai-api.specs.file :as specs.file]))
 

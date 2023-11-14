@@ -295,7 +295,7 @@
                :config ::specs.config/config)
   :ret ::specs.file/delete-result)
 
-(defn fine-tunes
+(defn ^:deprecated fine-tunes
   "Retrieves the list of fine-tunes associated with the provided config.
 
   Example:
@@ -307,7 +307,7 @@
   :args (s/cat :config ::specs.config/config)
   :ret ::specs.fine-tune/description-list)
 
-(defn fine-tune
+(defn ^:deprecated fine-tune
   "Retrieves the details of a specific fine-tune by its id.
 
   Example:
@@ -321,7 +321,7 @@
                :config ::specs.config/config)
   :ret ::specs.fine-tune/description)
 
-(defn fine-tune-events
+(defn ^:deprecated fine-tune-events
   "Retrieves the list of events for a specific fine-tune by its id.
 
   Example:
@@ -335,7 +335,7 @@
                :config ::specs.config/config)
   :ret ::specs.fine-tune/event-list)
 
-(defn fine-tune-create!
+(defn ^:deprecated fine-tune-create!
   "Creates a new fine-tune with the provided parameters.
 
   Example:
@@ -352,7 +352,7 @@
                :config ::specs.config/config)
   :ret ::specs.fine-tune/description)
 
-(defn fine-tune-cancel!
+(defn ^:deprecated fine-tune-cancel!
   "Cancels a specific fine-tune by its id.
 
   Example:
@@ -366,7 +366,7 @@
                :config ::specs.config/config)
   :ret ::specs.fine-tune/description)
 
-(defn fine-tune-delete!
+(defn ^:deprecated fine-tune-delete!
   "Deletes a specific fine-tuned model by its id.
 
   Example:
