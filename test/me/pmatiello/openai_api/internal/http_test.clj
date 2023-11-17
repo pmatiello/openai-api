@@ -22,6 +22,12 @@
       (client/get "base-url/path" {:headers headers})
       {:status 200 :body "{\"data\":\"ok\"}"}))
 
+  (mfn/testing "includes provided query params"
+    (is (= {:data "ok"} (http/get! 'path config {:query-params 'query-params})))
+    (mfn/providing
+      (client/get "base-url/path" {:headers headers :query-params 'query-params})
+      {:status 200 :body "{\"data\":\"ok\"}"}))
+
   (mfn/testing "converts between clojure and json key style conventions"
     (is (= {:abc-xyz "ok"} (http/get! 'path config)))
     (mfn/providing

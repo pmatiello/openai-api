@@ -18,12 +18,13 @@
 (s/def ::multipart map?)
 (s/def ::parse? boolean?)
 (s/def ::path string?)
+(s/def ::query-params map?)
 (s/def ::req-map map?)
 (s/def ::url string?)
 (s/def ::http-opts
   (s/keys :opt-un [::as]))
 (s/def ::options
-  (s/keys* :opt-un [::parse?]))
+  (s/keys* :opt-un [::parse? ::query-params]))
 (s/def ::params
   (s/keys :opt-un [::body ::multipart ::http-opts]))
 
@@ -72,6 +73,14 @@
   :args (s/cat :req-map ::req-map :config ::specs.config/config)
   :ret ::req-map)
 
+(defn ^:private with-query-params
+  [req-map options]
+  (merge req-map (select-keys options [:query-params])))
+
+(s/fdef with-query-params
+  :args (s/cat :req-map ::req-map :options ::options)
+  :ret ::req-map)
+
 (defn ^:private params->http-opts
   [params]
   (-> params
@@ -113,9 +122,11 @@
 (defn get!
   [path config & {:as options}]
   (let [url      (config+path->url config path)
+        options  (or options {})
         req-map  (-> {}
                      (with-headers config)
-                     (with-config-http-opts config))
+                     (with-config-http-opts config)
+                     (with-query-params options))
         response (client/get url req-map)
         options  (merge {:parse? true} options)]
     (as-api-response response options)))

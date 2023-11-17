@@ -106,6 +106,9 @@
 
 ; Fine-tuning jobs
 (openai/fine-tuning-jobs {} config)
+(openai/fine-tuning-jobs
+  {:after (-> (openai/fine-tuning-jobs {} config) :data first :id)}
+  config)
 
 (openai/fine-tuning-jobs-create!
   {:training-file (->> config openai/files :data
