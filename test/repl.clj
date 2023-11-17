@@ -104,10 +104,17 @@
 (openai/file-delete! (-> config openai/files :data first :id) config)
 (s/valid? :me.pmatiello.openai-api.specs.file/delete-result *1)
 
-; Fine-tuning
+; Fine-tuning jobs
 (openai/fine-tuning-jobs {} config)
 
-; Fine-tunes
+(openai/fine-tuning-jobs-create!
+  {:training-file (->> config openai/files :data
+                       (filter #(-> % :filename #{"colors.txt"}))
+                       first :id)
+   :model         "davinci-002"}
+  config)
+
+; Fine-tunes (deprecated)
 (openai/fine-tune-create!
   {:training-file (->> config openai/files :data
                        (filter #(-> % :filename #{"colors.txt"}))

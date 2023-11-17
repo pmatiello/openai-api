@@ -400,3 +400,15 @@
   (openai/fine-tuning-jobs {} config)"
   [params config]
   (http/get! "/v1/fine_tuning/jobs" config {:query-params params}))
+
+(defn fine-tuning-jobs-create!
+  "Creates a new fine tuning job with the provided parameters.
+
+  Example:
+  (openai/fine-tuning-jobs-create!
+    {:training-file \"file-id\"
+     :model         \"model\"}
+    config)"
+  [params config]
+  (http/post! "/v1/fine_tuning/jobs"
+              {:body params} config))
