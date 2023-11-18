@@ -106,9 +106,12 @@
 
 ; Fine-tuning jobs
 (openai/fine-tuning-jobs {} config)
+(s/valid? :me.pmatiello.openai-api.specs.fine-tuning-jobs/description-list *1)
+
 (openai/fine-tuning-jobs
   {:after (-> (openai/fine-tuning-jobs {} config) :data first :id)}
   config)
+(s/valid? :me.pmatiello.openai-api.specs.fine-tuning-jobs/description-list *1)
 
 (openai/fine-tuning-jobs-create!
   {:training-file (->> config openai/files :data
@@ -116,6 +119,7 @@
                        first :id)
    :model         "davinci-002"}
   config)
+(s/valid? :me.pmatiello.openai-api.specs.fine-tuning-jobs/description *1)
 
 ; Fine-tunes (deprecated)
 (openai/fine-tune-create!

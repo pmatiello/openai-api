@@ -17,6 +17,7 @@
             [me.pmatiello.openai-api.specs.embedding :as specs.embedding]
             [me.pmatiello.openai-api.specs.file :as specs.file]
             [me.pmatiello.openai-api.specs.fine-tune :as specs.fine-tune]
+            [me.pmatiello.openai-api.specs.fine-tuning-jobs :as specs.fine-tuning-jobs]
             [me.pmatiello.openai-api.specs.image :as specs.image]
             [me.pmatiello.openai-api.specs.model :as specs.model]
             [me.pmatiello.openai-api.specs.moderation :as specs.moderation]))
@@ -401,6 +402,11 @@
   [params config]
   (http/get! "/v1/fine_tuning/jobs" config {:query-params params}))
 
+(s/fdef fine-tuning-jobs
+  :args (s/cat :params ::specs.fine-tuning-jobs/params
+               :config ::specs.config/config)
+  :ret ::specs.fine-tuning-jobs/description-list)
+
 (defn fine-tuning-jobs-create!
   "Creates a new fine tuning job with the provided parameters.
 
@@ -412,3 +418,8 @@
   [params config]
   (http/post! "/v1/fine_tuning/jobs"
               {:body params} config))
+
+(s/fdef fine-tuning-jobs-create!
+  :args (s/cat :params ::specs.fine-tuning-jobs/create-params
+               :config ::specs.config/config)
+  :ret ::specs.fine-tuning-jobs/description)
