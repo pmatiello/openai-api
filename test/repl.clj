@@ -113,6 +113,11 @@
   config)
 (s/valid? :me.pmatiello.openai-api.specs.fine-tuning-jobs/description-list *1)
 
+(openai/fine-tuning-job
+  (-> (openai/fine-tuning-jobs {} config) :data first :id)
+  config)
+(s/valid? :me.pmatiello.openai-api.specs.fine-tuning-jobs/description *1)
+
 (openai/fine-tuning-jobs-create!
   {:training-file (->> config openai/files :data
                        (filter #(-> % :filename #{"colors.txt"}))

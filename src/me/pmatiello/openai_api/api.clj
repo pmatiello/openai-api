@@ -407,6 +407,20 @@
                :config ::specs.config/config)
   :ret ::specs.fine-tuning-jobs/description-list)
 
+(defn fine-tuning-job
+  "Retrieves the details of a specific fine-tuning by its id.
+
+  Example:
+  (openai/fine-tuning-job \"ft-id\" config)"
+  [id config]
+  (http/get! (str "/v1/fine_tuning/jobs/" (name id))
+             config))
+
+(s/fdef fine-tuning-job
+  :args (s/cat :id ::specs.fine-tuning-jobs/id
+               :config ::specs.config/config)
+  :ret ::specs.fine-tuning-jobs/description)
+
 (defn fine-tuning-jobs-create!
   "Creates a new fine tuning job with the provided parameters.
 
