@@ -215,3 +215,10 @@
     (mfn/providing
       (http/get! "/v1/fine_tuning/jobs/id" 'config)
       'response)))
+
+(deftest fine-tuning-jobs-create!-test
+  (mfn/testing "creates a fine tuning job"
+    (is (= 'response (api/fine-tuning-jobs-create! 'params 'config)))
+    (mfn/providing
+      (http/post! "/v1/fine_tuning/jobs"
+                  {:body 'params} 'config) 'response)))

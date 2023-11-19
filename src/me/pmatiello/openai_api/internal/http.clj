@@ -74,7 +74,7 @@
   :ret ::req-map)
 
 (defn ^:private with-query-params
-  [req-map options]
+  [req-map & {:as options}]
   (merge req-map (select-keys options [:query-params])))
 
 (s/fdef with-query-params
