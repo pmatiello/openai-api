@@ -28,7 +28,8 @@
 (s/def ::params
   (s/keys :opt-un [::body ::multipart ::http-opts]))
 
-(defn config+path->url [config path]
+(defn config+path->url
+  [config path]
   (str (:base-url config) path))
 
 (s/fdef config+path->url
@@ -99,7 +100,8 @@
   :args (s/cat :req-map ::req-map :params ::params)
   :ret ::req-map)
 
-(defn ^:private as-api-response [http-response & {:as options}]
+(defn ^:private as-api-response
+  [http-response & {:as options}]
   (let [body    (:body http-response)
         options (merge {:parse? true} options)]
     (cond
@@ -164,7 +166,8 @@
   :args (s/cat :req-map ::req-map :params ::params)
   :ret ::req-map)
 
-(defn post! [path params config]
+(defn post!
+  [path params config]
   (let [url      (config+path->url config path)
         req-map  (-> {}
                      (with-headers config)

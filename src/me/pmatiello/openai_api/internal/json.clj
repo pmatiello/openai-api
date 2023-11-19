@@ -9,7 +9,8 @@
       (str/replace #"_" "-")
       keyword))
 
-(defn read [payload]
+(defn read
+  [payload]
   (json/read-str payload {:key-fn json->clj-keys}))
 
 (defn ^:private clj->json-keys
@@ -18,5 +19,6 @@
       name
       (str/replace #"-" "_")))
 
-(defn write [payload]
+(defn write
+  [payload]
   (json/write-str payload {:key-fn clj->json-keys}))
