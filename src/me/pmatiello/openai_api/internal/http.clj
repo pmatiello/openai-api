@@ -18,13 +18,15 @@
 (s/def ::multipart map?)
 (s/def ::parse? boolean?)
 (s/def ::path string?)
-(s/def ::query-params map?)
+(s/def ::query-params (s/nilable map?))
 (s/def ::req-map map?)
 (s/def ::url string?)
 (s/def ::http-opts
   (s/keys :opt-un [::as]))
+(s/def ::options*
+  (s/keys :opt-un [::parse?]))
 (s/def ::options
-  (s/keys* :opt-un [::parse? ::query-params]))
+  (s/nilable ::options*))
 (s/def ::params
   (s/keys :opt-un [::body ::multipart ::http-opts]))
 
@@ -75,11 +77,14 @@
   :ret ::req-map)
 
 (defn ^:private with-query-params
-  [req-map & {:as options}]
-  (merge req-map (select-keys options [:query-params])))
+  [req-map query-params]
+  (if query-params
+    (assoc req-map :query-params query-params)
+    req-map))
 
 (s/fdef with-query-params
-  :args (s/cat :req-map ::req-map :options ::options)
+  :args (s/cat :req-map ::req-map
+               :query-params ::query-params)
   :ret ::req-map)
 
 (defn ^:private params->http-opts
@@ -101,7 +106,7 @@
   :ret ::req-map)
 
 (defn ^:private as-api-response
-  [http-response & {:as options}]
+  [http-response options]
   (let [body    (:body http-response)
         options (merge {:parse? true} options)]
     (cond
@@ -118,23 +123,24 @@
            (map json/read)))))
 
 (s/fdef as-api-response
-  :args (s/cat :http-response ::http-response :options ::options)
+  :args (s/cat :http-response ::http-response
+               :options ::options)
   :ret ::api-response)
 
 (defn get!
-  [path config & {:as options}]
+  [path query-params config options]
   (let [url      (config+path->url config path)
-        options  (or options {})
         req-map  (-> {}
                      (with-headers config)
                      (with-config-http-opts config)
-                     (with-query-params options))
+                     (with-query-params query-params))
         response (client/get url req-map)
         options  (merge {:parse? true} options)]
     (as-api-response response options)))
 
 (s/fdef get!
   :args (s/cat :path ::path
+               :query-params ::query-params
                :config ::specs.config/config
                :options ::options)
   :ret ::api-response)
@@ -176,7 +182,7 @@
                      (with-body params)
                      (with-multipart params))
         response (client/post url req-map)]
-    (as-api-response response)))
+    (as-api-response response {})))
 
 (s/fdef post!
   :args (s/cat :path ::path
@@ -191,7 +197,7 @@
                      (with-headers config)
                      (with-config-http-opts config))
         response (client/delete url req-map)]
-    (as-api-response response)))
+    (as-api-response response {})))
 
 (s/fdef delete!
   :args (s/cat :path ::path

@@ -36,13 +36,15 @@
   (mfn/testing "retrieves list of models"
     (is (= 'response (api/models 'config)))
     (mfn/providing
-      (http/get! "/v1/models" 'config) 'response)))
+      (http/get! "/v1/models" nil 'config nil)
+      'response)))
 
 (mfn/deftest model-test
   (mfn/testing "retrieves the given model"
     (is (= 'response (api/model 'model 'config)))
     (mfn/providing
-      (http/get! "/v1/models/model" 'config) 'response)))
+      (http/get! "/v1/models/model" nil 'config nil)
+      'response)))
 
 
 (mfn/deftest completion-test
@@ -126,20 +128,22 @@
   (mfn/testing "retrieves list of files"
     (is (= 'response (api/files 'config)))
     (mfn/providing
-      (http/get! "/v1/files" 'config) 'response)))
+      (http/get! "/v1/files" nil 'config nil)
+      'response)))
 
 (deftest file-test
   (mfn/testing "retrieve file"
     (is (= 'response (api/file 'id 'config)))
     (mfn/providing
-      (http/get! "/v1/files/id" 'config) 'response)))
+      (http/get! "/v1/files/id" nil 'config nil)
+      'response)))
 
 (deftest file-content-test
   (mfn/testing "retrieve file"
     (is (= 'response (api/file-content 'id 'config)))
     (mfn/providing
-      (http/get! "/v1/files/id/content"
-                 'config {:parse? false}) 'response)))
+      (http/get! "/v1/files/id/content" nil 'config {:parse? false})
+      'response)))
 
 (deftest file-upload!-test
   (mfn/testing "uploads a file"
@@ -158,20 +162,21 @@
   (mfn/testing "retrieves list of fine-tunes"
     (is (= 'response (api/fine-tunes 'config)))
     (mfn/providing
-      (http/get! "/v1/fine-tunes" 'config) 'response)))
+      (http/get! "/v1/fine-tunes" nil 'config nil)
+      'response)))
 
 (deftest fine-tune-test
   (mfn/testing "retrieves a fine-tune"
     (is (= 'response (api/fine-tune 'id 'config)))
     (mfn/providing
-      (http/get! "/v1/fine-tunes/id" 'config)
+      (http/get! "/v1/fine-tunes/id" nil 'config nil)
       'response)))
 
 (deftest fine-tune-events-test
   (mfn/testing "retrieves events for a fine-tune"
     (is (= 'response (api/fine-tune-events 'id 'config)))
     (mfn/providing
-      (http/get! "/v1/fine-tunes/id/events" 'config)
+      (http/get! "/v1/fine-tunes/id/events" nil 'config nil)
       'response)))
 
 (deftest fine-tune-create!-test
@@ -206,14 +211,14 @@
   (mfn/testing "retrieves fine tuning jobs"
     (is (= 'response (api/fine-tuning-jobs 'params 'config)))
     (mfn/providing
-      (http/get! "/v1/fine_tuning/jobs" 'config {:query-params 'params})
+      (http/get! "/v1/fine_tuning/jobs" 'params 'config nil)
       'response)))
 
 (deftest fine-tuning-job-test
   (mfn/testing "retrieves a fine tuning job"
     (is (= 'response (api/fine-tuning-job 'id 'config)))
     (mfn/providing
-      (http/get! "/v1/fine_tuning/jobs/id" 'config)
+      (http/get! "/v1/fine_tuning/jobs/id" nil 'config nil)
       'response)))
 
 (deftest fine-tuning-jobs-create!-test

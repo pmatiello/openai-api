@@ -17,25 +17,25 @@
 
 (mfn/deftest get!-test
   (mfn/testing "makes get request to endpoint and returns the response body"
-    (is (= {:data "ok"} (http/get! 'path config)))
+    (is (= {:data "ok"} (http/get! 'path nil config nil)))
     (mfn/providing
       (client/get "base-url/path" {:headers headers})
       {:status 200 :body "{\"data\":\"ok\"}"}))
 
   (mfn/testing "includes provided query params"
-    (is (= {:data "ok"} (http/get! 'path config {:query-params 'query-params})))
+    (is (= {:data "ok"} (http/get! 'path 'query-params config nil)))
     (mfn/providing
       (client/get "base-url/path" {:headers headers :query-params 'query-params})
       {:status 200 :body "{\"data\":\"ok\"}"}))
 
   (mfn/testing "converts between clojure and json key style conventions"
-    (is (= {:abc-xyz "ok"} (http/get! 'path config)))
+    (is (= {:abc-xyz "ok"} (http/get! 'path nil config nil)))
     (mfn/providing
       (client/get "base-url/path" {:headers headers})
       {:status 200 :body "{\"abc_xyz\":\"ok\"}"}))
 
   (mfn/testing "returns unparsed results when options include {:parse? false}"
-    (is (= "raw body" (http/get! 'path config {:parse? false})))
+    (is (= "raw body" (http/get! 'path nil config {:parse? false})))
     (mfn/providing
       (client/get "base-url/path" {:headers headers})
       {:status 200 :body "raw body"})))
@@ -100,25 +100,27 @@
 
 (mfn/deftest authorization-test
   (mfn/testing "includes api-key header"
-    (http/get! 'path config)
+    (http/get! 'path nil config nil)
     (mfn/providing
       (client/get (mockfn.matchers/any)
                   {:headers {"Authorization" "Bearer api-key"}})
       {:status 200 :body "{}"}))
 
   (mfn/testing "includes organization header if provided in config"
-    (http/get! 'path (merge config {:org-id "org-id"}))
+    (http/get! 'path nil (merge config {:org-id "org-id"}) nil)
     (mfn/providing
       (client/get (mockfn.matchers/any)
                   {:headers {"Authorization"       "Bearer api-key"
                              "OpenAI-Organization" "org-id"}})
       {:status 200 :body "{}"})))
 
+(def ^:private config+http-opts
+  (merge config {:http-opts {:connection-timeout 2500
+                             :socket-timeout 2500}}))
+
 (mfn/deftest config-http-opts-test
   (mfn/testing "includes timeout settings"
-    (http/get! 'path
-               (merge config
-                      {:http-opts {:connection-timeout 2500 :socket-timeout 2500}}))
+    (http/get! 'path nil config+http-opts nil)
     (mfn/providing
       (client/get (mockfn.matchers/any)
                   {:headers            {"Authorization" "Bearer api-key"}
@@ -127,8 +129,7 @@
       {:status 200 :body "{}"}))
 
   (mfn/testing "ignores unknown settings"
-    (http/get! 'path
-               (merge config {:http-opts {:unknown "unknown"}}))
+    (http/get! 'path nil config {:http-opts {:unknown "unknown"}})
     (mfn/providing
       (client/get (mockfn.matchers/any)
                   {:headers {"Authorization" "Bearer api-key"}})

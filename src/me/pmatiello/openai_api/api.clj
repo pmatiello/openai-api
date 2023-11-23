@@ -46,8 +46,7 @@
   Example:
   (openai/models config)"
   [config]
-  (http/get! "/v1/models"
-             config))
+  (http/get! "/v1/models" nil config nil))
 
 (s/fdef models
   :args (s/cat :config ::specs.config/config)
@@ -59,8 +58,7 @@
   Example:
   (openai/model \"gpt-3.5-turbo\" config)"
   [id config]
-  (http/get! (str "/v1/models/" (name id))
-             config))
+  (http/get! (str "/v1/models/" (name id)) nil config nil))
 
 (s/fdef model
   :args (s/cat :id ::specs.model/id
@@ -230,8 +228,7 @@
   Example:
   (openai/files config)"
   [config]
-  (http/get! "/v1/files"
-             config))
+  (http/get! "/v1/files" nil config nil))
 
 (s/fdef files
   :args (s/cat :config ::specs.config/config)
@@ -243,8 +240,7 @@
   Example:
   (openai/file \"file-id\" config)"
   [id config]
-  (http/get! (str "/v1/files/" id)
-             config))
+  (http/get! (str "/v1/files/" id) nil config nil))
 
 (s/fdef file
   :args (s/cat :id ::specs.file/id
@@ -257,8 +253,7 @@
   Example:
   (openai/file-content \"file-id\" config)"
   [id config]
-  (http/get! (str "/v1/files/" id "/content")
-             config {:parse? false}))
+  (http/get! (str "/v1/files/" id "/content") nil config {:parse? false}))
 
 (s/fdef file-content
   :args (s/cat :id ::specs.file/id
@@ -302,7 +297,7 @@
   Example:
   (openai/fine-tunes config)"
   [config]
-  (http/get! "/v1/fine-tunes" config))
+  (http/get! "/v1/fine-tunes" nil config nil))
 
 (s/fdef fine-tunes
   :args (s/cat :config ::specs.config/config)
@@ -314,8 +309,7 @@
   Example:
   (openai/fine-tune \"ft-id\" config)"
   [id config]
-  (http/get! (str "/v1/fine-tunes/" (name id))
-             config))
+  (http/get! (str "/v1/fine-tunes/" (name id)) nil config nil))
 
 (s/fdef fine-tune
   :args (s/cat :id ::specs.fine-tune/id
@@ -328,8 +322,7 @@
   Example:
   (openai/fine-tune-events \"ft-id\" config)"
   [id config]
-  (http/get! (str "/v1/fine-tunes/" id "/events")
-             config))
+  (http/get! (str "/v1/fine-tunes/" id "/events") nil config nil))
 
 (s/fdef fine-tune-events
   :args (s/cat :id ::specs.fine-tune/id
@@ -400,7 +393,7 @@
   Example:
   (openai/fine-tuning-jobs {} config)"
   [params config]
-  (http/get! "/v1/fine_tuning/jobs" config {:query-params params}))
+  (http/get! "/v1/fine_tuning/jobs" params config nil))
 
 (s/fdef fine-tuning-jobs
   :args (s/cat :params ::specs.fine-tuning-jobs/params
@@ -413,8 +406,7 @@
   Example:
   (openai/fine-tuning-job \"ft-id\" config)"
   [id config]
-  (http/get! (str "/v1/fine_tuning/jobs/" (name id))
-             config))
+  (http/get! (str "/v1/fine_tuning/jobs/" (name id)) nil config nil))
 
 (s/fdef fine-tuning-job
   :args (s/cat :id ::specs.fine-tuning-jobs/id
