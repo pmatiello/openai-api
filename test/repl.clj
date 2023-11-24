@@ -126,6 +126,11 @@
   config)
 (s/valid? :me.pmatiello.openai-api.specs.fine-tuning-jobs/description *1)
 
+(openai/fine-tuning-jobs-cancel!
+  (-> (openai/fine-tuning-jobs {} config) :data first :id)
+  config)
+(s/valid? :me.pmatiello.openai-api.specs.fine-tuning-jobs/description *1)
+
 ; Fine-tunes (deprecated)
 (openai/fine-tune-create!
   {:training-file (->> config openai/files :data

@@ -227,3 +227,10 @@
     (mfn/providing
       (http/post! "/v1/fine_tuning/jobs"
                   {:body 'params} 'config) 'response)))
+
+(deftest fine-tuning-jobs-cancel!-test
+  (mfn/testing "cancels a fine-tune job"
+    (is (= 'response (api/fine-tuning-jobs-cancel! 'id 'config)))
+    (mfn/providing
+      (http/post! "/v1/fine_tuning/jobs/id/cancel"
+                  {} 'config) 'response)))

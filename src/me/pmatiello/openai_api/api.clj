@@ -429,3 +429,17 @@
   :args (s/cat :params ::specs.fine-tuning-jobs/create-params
                :config ::specs.config/config)
   :ret ::specs.fine-tuning-jobs/description)
+
+(defn fine-tuning-jobs-cancel!
+  "Cancels a specific fine-tune by its id.
+
+  Example:
+  (openai/fine-tuning-jobs-cancel! \"ft-id\" config)"
+  [id config]
+  (http/post! (str "/v1/fine_tuning/jobs/" id "/cancel")
+              {} config))
+
+(s/fdef fine-tuning-jobs-cancel!
+  :args (s/cat :id ::specs.fine-tuning-jobs/id
+               :config ::specs.config/config)
+  :ret ::specs.fine-tuning-jobs/description)
