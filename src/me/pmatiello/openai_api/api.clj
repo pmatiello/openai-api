@@ -112,11 +112,11 @@
   [id config]
   (http/get! (str "/v1/fine_tuning/jobs/" (name id)) nil config nil))
 
-(defn fine-tuning-jobs-create!
-  "Creates a new fine tuning job with the provided parameters.
+(defn fine-tuning-job-create!
+  "Creates a new fine-tuning job with the provided parameters.
 
   Example:
-  (openai/fine-tuning-jobs-create!
+  (openai/fine-tuning-job-create!
     {:training-file \"file-id\"
      :model         \"model\"}
     config)"
@@ -124,16 +124,20 @@
   (http/post! "/v1/fine_tuning/jobs"
               {:body params} config))
 
-(defn fine-tuning-jobs-cancel!
-  "Cancels a specific fine-tune by its id.
+(defn fine-tuning-job-cancel!
+  "Cancels a specific fine-tuning job by its id.
 
   Example:
-  (openai/fine-tuning-jobs-cancel! \"ft-id\" config)"
+  (openai/fine-tuning-job-cancel! \"ft-id\" config)"
   [id config]
   (http/post! (str "/v1/fine_tuning/jobs/" id "/cancel")
               {} config))
 
-(defn fine-tuning-jobs-events
+(defn fine-tuning-job-events
+  "Retrieves events for a fine-tuning job.
+
+  Example:
+  (fine-tuning-job-events \"td-id\" nil config)"
   [id params config]
   (http/get! (str "/v1/fine_tuning/jobs/" (name id) "/events")
              params config nil))

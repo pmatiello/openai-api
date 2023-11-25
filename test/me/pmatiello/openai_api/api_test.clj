@@ -91,23 +91,23 @@
       (http/get! "/v1/fine_tuning/jobs/id" nil 'config nil)
       'response)))
 
-(deftest fine-tuning-jobs-create!-test
+(deftest fine-tuning-job-create!-test
   (mfn/testing "creates a fine tuning job"
-    (is (= 'response (api/fine-tuning-jobs-create! 'params 'config)))
+    (is (= 'response (api/fine-tuning-job-create! 'params 'config)))
     (mfn/providing
       (http/post! "/v1/fine_tuning/jobs"
                   {:body 'params} 'config) 'response)))
 
-(deftest fine-tuning-jobs-cancel!-test
+(deftest fine-tuning-job-cancel!-test
   (mfn/testing "cancels a fine-tune job"
-    (is (= 'response (api/fine-tuning-jobs-cancel! 'id 'config)))
+    (is (= 'response (api/fine-tuning-job-cancel! 'id 'config)))
     (mfn/providing
       (http/post! "/v1/fine_tuning/jobs/id/cancel"
                   {} 'config) 'response)))
 
-(deftest fine-tuning-jobs-events-test
+(deftest fine-tuning-job-events-test
   (mfn/testing "retrieves events for a fine tuning job"
-    (is (= 'response (api/fine-tuning-jobs-events 'id 'params 'config)))
+    (is (= 'response (api/fine-tuning-job-events 'id 'params 'config)))
     (mfn/providing
       (http/get! "/v1/fine_tuning/jobs/id/events" 'params 'config nil)
       'response)))

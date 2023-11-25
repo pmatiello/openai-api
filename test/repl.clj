@@ -97,18 +97,18 @@
   (-> (openai/fine-tuning-jobs {} config) :data first :id)
   config)
 
-(openai/fine-tuning-jobs-create!
+(openai/fine-tuning-job-create!
   {:training-file (->> config openai/files :data
                        (filter #(-> % :filename #{"colors.txt"}))
                        first :id)
    :model         "davinci-002"}
   config)
 
-(openai/fine-tuning-jobs-cancel!
+(openai/fine-tuning-job-cancel!
   (-> (openai/fine-tuning-jobs {} config) :data first :id)
   config)
 
-(openai/fine-tuning-jobs-events
+(openai/fine-tuning-job-events
   (-> (openai/fine-tuning-jobs {} config) :data first :id) {}
   config)
 
