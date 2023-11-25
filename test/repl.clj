@@ -109,7 +109,7 @@
   config)
 
 (openai/fine-tuning-jobs-events
-  (-> (openai/fine-tuning-jobs {} config) :data (nth 4) :id) {}
+  (-> (openai/fine-tuning-jobs {} config) :data first :id) {}
   config)
 
 ; Fine-tunes (deprecated)
