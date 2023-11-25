@@ -234,3 +234,10 @@
     (mfn/providing
       (http/post! "/v1/fine_tuning/jobs/id/cancel"
                   {} 'config) 'response)))
+
+(deftest fine-tuning-jobs-events-test
+  (mfn/testing "retrieves events for a fine tuning job"
+    (is (= 'response (api/fine-tuning-jobs-events 'id 'params 'config)))
+    (mfn/providing
+      (http/get! "/v1/fine_tuning/jobs/id/events" 'params 'config nil)
+      'response)))

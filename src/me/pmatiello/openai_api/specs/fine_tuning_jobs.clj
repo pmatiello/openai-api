@@ -5,7 +5,7 @@
 
 (s/def ::after ::id)
 (s/def ::limit integer?)
-(s/def ::params
+(s/def ::list-params
   (s/keys :opt-un [::after ::limit]))
 
 
@@ -62,3 +62,25 @@
 (s/def ::create-params
   (s/keys :req-un [::model ::training-file]
           :opt-un [::hyperparameters ::suffix ::validation-file]))
+
+(s/def ::step integer?)
+(s/def ::train-loss number?)
+(s/def ::train-mean-token-accuracy number?)
+
+(s/def :me.pmatiello.openai-api.specs.fine-tuning-jobs.events.one/data
+  (s/nilable (s/keys :opt-un [::step ::train-loss ::train-mean-token-accuracy])))
+
+(s/def ::level string?)
+(s/def ::type string?)
+
+(s/def ::event
+  (s/keys
+    :req-un [::created-at ::id ::level ::message ::object ::type
+             :me.pmatiello.openai-api.specs.fine-tuning-jobs.events.one/data]))
+
+(s/def :me.pmatiello.openai-api.specs.fine-tuning-jobs.events/data
+  (s/coll-of ::event))
+
+(s/def ::events-list
+  (s/keys :req-un [:me.pmatiello.openai-api.specs.fine-tuning-jobs.events/data
+                   ::has-more ::object]))

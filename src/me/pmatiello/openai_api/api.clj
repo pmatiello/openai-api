@@ -396,7 +396,7 @@
   (http/get! "/v1/fine_tuning/jobs" params config nil))
 
 (s/fdef fine-tuning-jobs
-  :args (s/cat :params ::specs.fine-tuning-jobs/params
+  :args (s/cat :params ::specs.fine-tuning-jobs/list-params
                :config ::specs.config/config)
   :ret ::specs.fine-tuning-jobs/description-list)
 
@@ -443,3 +443,14 @@
   :args (s/cat :id ::specs.fine-tuning-jobs/id
                :config ::specs.config/config)
   :ret ::specs.fine-tuning-jobs/description)
+
+(defn fine-tuning-jobs-events
+  [id params config]
+  (http/get! (str "/v1/fine_tuning/jobs/" (name id) "/events")
+             params config nil))
+
+(s/fdef fine-tuning-jobs-events
+  :args (s/cat :id ::specs.fine-tuning-jobs/id
+               :params ::specs.fine-tuning-jobs/list-params
+               :config ::specs.config/config)
+  :ret ::specs.fine-tuning-jobs/events-list)
