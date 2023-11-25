@@ -45,6 +45,15 @@
   [id config]
   (http/get! (str "/v1/models/" (name id)) nil config nil))
 
+(defn model-delete!
+  "Deletes a specific fine-tuned model by its id.
+
+  Example:
+  (openai/model-delete! \"model-id\" config)"
+  [model-id config]
+  (http/delete! (str "/v1/models/" model-id) config))
+
+
 (defn ^:private params->http-params
   [params]
   (let [body      {:body params}

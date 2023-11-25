@@ -46,6 +46,12 @@
       (http/get! "/v1/models/model" nil 'config nil)
       'response)))
 
+(deftest model-delete!-test
+  (mfn/testing "deletes a fine-tuned model"
+    (is (= 'response (api/model-delete! 'model 'config)))
+    (mfn/providing
+      (http/delete! "/v1/models/model"
+                    'config) 'response)))
 
 (mfn/deftest completion-test
   (mfn/testing "retrieves completion"
