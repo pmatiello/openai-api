@@ -5,7 +5,7 @@ Notable changes to this project are documented in this file.
 ## v0.5.0
 **Released at:** UNRELEASED
 - Adds API calls for the new fine-tuning API.
-- Deprecates calls to edits and fine-tunes APIs, as these APIs have been
+- Deprecates calls to completion, edits and fine-tunes APIs, as these APIs have been
   deprecated by OpenAI.
 - Removes specs for functions calling the OpenAI API.
 

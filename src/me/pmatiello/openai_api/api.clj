@@ -256,7 +256,7 @@
 
 ; deprecated
 
-(defn completion
+(defn ^:deprecated completion
   "Generates a completion based on the given parameters.
 
   Example:
