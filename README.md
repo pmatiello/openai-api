@@ -20,7 +20,7 @@ Clojure project.
 The functions for interacting with the OpenAI API are located in the 
 `me.pmatiello.openai-api.api` namespace.
 
-Refer to the specs for the functions in this namespace and to the official
+Refer to the official
 [OpenAI API reference](https://platform.openai.com/docs/api-reference) for details
 about the parameters required for these functions.
 
