@@ -44,7 +44,7 @@
   (mfn/testing "single part requests"
     (mfn/testing "posts body to endpoint and returns the response body"
       (is (= {:data "ok"}
-             (http/post! 'path {:body {:k "v"}} config)))
+             (http/post! 'path {:body {:k "v"}} config nil)))
       (mfn/providing
         (client/post "base-url/path"
                      {:headers      headers
@@ -54,18 +54,27 @@
 
     (mfn/testing "converts between clojure and json key style conventions"
       (is (= {:a-bc "ok"}
-             (http/post! 'path {:body {:x-yz "ko"}} config)))
+             (http/post! 'path {:body {:x-yz "ko"}} config nil)))
       (mfn/providing
         (client/post "base-url/path"
                      {:headers      headers
                       :body         "{\"x_yz\":\"ko\"}"
                       :content-type :json})
-        {:status 200 :body "{\"a_bc\":\"ok\"}"})))
+        {:status 200 :body "{\"a_bc\":\"ok\"}"}))
+
+    (mfn/testing "returns unparsed results when options include {:parse? false}"
+      (is (= "raw body" (http/post! 'path {:body {:k "v"}} config {:parse? false})))
+      (mfn/providing
+        (client/post "base-url/path"
+                     {:headers      headers
+                      :body         "{\"k\":\"v\"}"
+                      :content-type :json})
+        {:status 200 :body "raw body"})))
 
   (mfn/testing "multipart requests"
     (mfn/testing "posts parameters to endpoint and returns the response body"
       (is (= {:data "ok"}
-             (http/post! 'path {:multipart {:k1 "v1" :k2 2}} config)))
+             (http/post! 'path {:multipart {:k1 "v1" :k2 2}} config nil)))
       (mfn/providing
         (client/post "base-url/path"
                      {:headers   headers
@@ -75,7 +84,7 @@
 
     (mfn/testing "converts between clojure and json key style conventions"
       (is (= {:data "ok"}
-             (http/post! 'path {:multipart {:k-1 "v"}} config)))
+             (http/post! 'path {:multipart {:k-1 "v"}} config nil)))
       (mfn/providing
         (client/post "base-url/path"
                      {:headers   headers
@@ -84,7 +93,7 @@
 
     (mfn/testing "uploads given files"
       (is (= {:data "ok"}
-             (http/post! 'path {:multipart {:file file}} config)))
+             (http/post! 'path {:multipart {:file file}} config nil)))
       (mfn/providing
         (client/post "base-url/path"
                      {:headers   headers
@@ -137,7 +146,7 @@
 
 (mfn/deftest params-http-opts-test
   (mfn/testing "includes format settings"
-    (http/post! 'path {:http-opts {:as :stream}} config)
+    (http/post! 'path {:http-opts {:as :stream}} config nil)
     (mfn/providing
       (client/post (mockfn.matchers/any)
                    {:headers {"Authorization" "Bearer api-key"}
@@ -145,7 +154,7 @@
       {:status 200 :body "{}"}))
 
   (mfn/testing "ignores unknown settings"
-    (http/post! 'path {:http-opts {:unknown :unknown}} config)
+    (http/post! 'path {:http-opts {:unknown :unknown}} config nil)
     (mfn/providing
       (client/post (mockfn.matchers/any)
                    {:headers {"Authorization" "Bearer api-key"}})
@@ -154,7 +163,7 @@
 (mfn/deftest streaming-test
   (mfn/testing "returns the response as a stream of smaller responses"
     (is (= [{:pt 1} {:pt 2}]
-           (http/post! 'path {} config)))
+           (http/post! 'path {} config nil)))
     (mfn/providing
       (client/post "base-url/path" (mockfn.matchers/any))
       {:status 200

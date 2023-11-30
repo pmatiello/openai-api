@@ -65,6 +65,11 @@
                   config)
 
 ; Audio
+(def tmp-file (java.io.File/createTempFile "audio" ".mp3"))
+(openai/audio-speach {:model "tts-1" :input "hello world!" :voice "nova"} config)
+(io/copy *1 tmp-file)
+tmp-file
+
 (openai/audio-transcription {:model "whisper-1"
                              :file  (io/file "test/fixtures/audio.m4a")}
                             config)

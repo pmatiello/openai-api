@@ -173,7 +173,7 @@
   :ret ::req-map)
 
 (defn post!
-  [path params config]
+  [path params config options]
   (let [url      (config+path->url config path)
         req-map  (-> {}
                      (with-headers config)
@@ -182,12 +182,13 @@
                      (with-body params)
                      (with-multipart params))
         response (client/post url req-map)]
-    (as-api-response response {})))
+    (as-api-response response options)))
 
 (s/fdef post!
   :args (s/cat :path ::path
                :params ::params
-               :config ::specs.config/config)
+               :config ::specs.config/config
+               :options ::options)
   :ret ::api-response)
 
 (defn delete!

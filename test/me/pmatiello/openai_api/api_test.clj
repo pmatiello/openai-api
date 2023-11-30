@@ -36,19 +36,28 @@
 
 ; audio
 
+(deftest audio-speach-test
+  (mfn/testing "retrieves speach generated from text"
+    (is (= 'response (api/audio-speach 'params 'config)))
+    (mfn/providing
+      (http/post! "/v1/audio/speech"
+                  {:body 'params :http-opts {:as :stream}}
+                  'config {:parse? false})
+      'response)))
+
 (deftest audio-transcription-test
   (mfn/testing "retrieves an audio transcription"
     (is (= 'response (api/audio-transcription 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/audio/transcriptions"
-                  {:multipart 'params} 'config) 'response)))
+      (http/post! "/v1/audio/transcriptions" {:multipart 'params} 'config nil)
+      'response)))
 
 (deftest audio-translation-test
   (mfn/testing "retrieves an audio translation"
     (is (= 'response (api/audio-translation 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/audio/translations"
-                  {:multipart 'params} 'config) 'response)))
+      (http/post! "/v1/audio/translations" {:multipart 'params} 'config nil)
+      'response)))
 
 ; chat
 
@@ -56,14 +65,14 @@
   (mfn/testing "retrieves completion"
     (is (= 'response (api/chat 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/chat/completions" {:body 'params} 'config) 'response))
+      (http/post! "/v1/chat/completions" {:body 'params} 'config nil) 'response))
 
   (mfn/testing "streams completion"
     (is (= 'response (api/chat {:messages 'messages :stream true} 'config)))
     (mfn/providing
       (http/post! "/v1/chat/completions"
                   {:body {:messages 'messages :stream true} :http-opts {:as :stream}}
-                  'config)
+                  'config nil)
       'response)))
 
 ; embeddings
@@ -72,8 +81,7 @@
   (mfn/testing "retrieves embedding"
     (is (= 'response (api/embedding 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/embeddings"
-                  {:body 'params} 'config) 'response)))
+      (http/post! "/v1/embeddings" {:body 'params} 'config nil) 'response)))
 
 ; fine-tuning
 
@@ -95,15 +103,13 @@
   (mfn/testing "creates a fine tuning job"
     (is (= 'response (api/fine-tuning-job-create! 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/fine_tuning/jobs"
-                  {:body 'params} 'config) 'response)))
+      (http/post! "/v1/fine_tuning/jobs" {:body 'params} 'config nil) 'response)))
 
 (deftest fine-tuning-job-cancel!-test
   (mfn/testing "cancels a fine-tune job"
     (is (= 'response (api/fine-tuning-job-cancel! 'id 'config)))
     (mfn/providing
-      (http/post! "/v1/fine_tuning/jobs/id/cancel"
-                  {} 'config) 'response)))
+      (http/post! "/v1/fine_tuning/jobs/id/cancel" {} 'config nil) 'response)))
 
 (deftest fine-tuning-job-events-test
   (mfn/testing "retrieves events for a fine tuning job"
@@ -139,8 +145,7 @@
   (mfn/testing "uploads a file"
     (is (= 'response (api/file-upload! 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/files"
-                  {:multipart 'params} 'config) 'response)))
+      (http/post! "/v1/files" {:multipart 'params} 'config nil) 'response)))
 
 (deftest file-delete!-test
   (mfn/testing "deletes the given file"
@@ -154,22 +159,19 @@
   (mfn/testing "retrieves a generated image"
     (is (= 'response (api/image-generation 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/images/generations"
-                  {:body 'params} 'config) 'response)))
+      (http/post! "/v1/images/generations" {:body 'params} 'config nil) 'response)))
 
 (mfn/deftest image-edit-test
   (mfn/testing "retrieves an edited image"
     (is (= 'response (api/image-edit 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/images/edits"
-                  {:multipart 'params} 'config) 'response)))
+      (http/post! "/v1/images/edits" {:multipart 'params} 'config nil) 'response)))
 
 (deftest image-variation-test
   (mfn/testing "retrieves an image variation"
     (is (= 'response (api/image-variation 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/images/variations"
-                  {:multipart 'params} 'config) 'response)))
+      (http/post! "/v1/images/variations" {:multipart 'params} 'config nil) 'response)))
 
 ; models
 
@@ -200,8 +202,7 @@
   (mfn/testing "retrieves moderation classification for input"
     (is (= 'response (api/moderation 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/moderations"
-                  {:body 'params} 'config) 'response)))
+      (http/post! "/v1/moderations" {:body 'params} 'config nil) 'response)))
 
 ; deprecated
 
@@ -209,57 +210,50 @@
   (mfn/testing "retrieves completion"
     (is (= 'response (api/completion 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/completions" {:body 'params} 'config) 'response))
+      (http/post! "/v1/completions" {:body 'params} 'config nil) 'response))
 
   (mfn/testing "streams completion"
     (is (= 'response (api/completion {:prompt 'prompt :stream true} 'config)))
     (mfn/providing
       (http/post! "/v1/completions"
                   {:body {:prompt 'prompt :stream true} :http-opts {:as :stream}}
-                  'config)
-      'response)))
+                  'config nil) 'response)))
 
 (mfn/deftest edit-test
   (mfn/testing "retrieves edit"
     (is (= 'response (api/edit 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/edits"
-                  {:body 'params} 'config) 'response)))
+      (http/post! "/v1/edits" {:body 'params} 'config nil) 'response)))
 
 (mfn/deftest fine-tunes-test
   (mfn/testing "retrieves list of fine-tunes"
     (is (= 'response (api/fine-tunes 'config)))
     (mfn/providing
-      (http/get! "/v1/fine-tunes" nil 'config nil)
-      'response)))
+      (http/get! "/v1/fine-tunes" nil 'config nil) 'response)))
 
 (deftest fine-tune-test
   (mfn/testing "retrieves a fine-tune"
     (is (= 'response (api/fine-tune 'id 'config)))
     (mfn/providing
-      (http/get! "/v1/fine-tunes/id" nil 'config nil)
-      'response)))
+      (http/get! "/v1/fine-tunes/id" nil 'config nil) 'response)))
 
 (deftest fine-tune-events-test
   (mfn/testing "retrieves events for a fine-tune"
     (is (= 'response (api/fine-tune-events 'id 'config)))
     (mfn/providing
-      (http/get! "/v1/fine-tunes/id/events" nil 'config nil)
-      'response)))
+      (http/get! "/v1/fine-tunes/id/events" nil 'config nil) 'response)))
 
 (deftest fine-tune-create!-test
   (mfn/testing "creates a fine-tuned model"
     (is (= 'response (api/fine-tune-create! 'params 'config)))
     (mfn/providing
-      (http/post! "/v1/fine-tunes"
-                  {:body 'params} 'config) 'response)))
+      (http/post! "/v1/fine-tunes" {:body 'params} 'config nil) 'response)))
 
 (deftest fine-tune-cancel!-test
   (mfn/testing "cancels a fine-tune job"
     (is (= 'response (api/fine-tune-cancel! 'id 'config)))
     (mfn/providing
-      (http/post! "/v1/fine-tunes/id/cancel"
-                  {} 'config) 'response)))
+      (http/post! "/v1/fine-tunes/id/cancel" {} 'config nil) 'response)))
 
 (deftest fine-tune-delete!-test
   (mfn/testing "deletes a fine-tuned model"

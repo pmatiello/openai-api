@@ -35,6 +35,21 @@
 
 ; audio
 
+(defn audio-speach
+  "Generates speach from input text.
+
+  Returns an input stream with the generated audio content.
+
+  Example:
+  (openai/audio-speach
+    {:model \"tts-1\"
+     :input \"hello world!\"
+     :voice \"nova\"}
+    config)"
+  [params config]
+  (http/post! "/v1/audio/speech"
+              {:body params :http-opts {:as :stream}} config {:parse? false}))
+
 (defn audio-transcription
   "Transcribes audio based on the given parameters.
 
@@ -44,8 +59,7 @@
      :file  (io/file \"audio.m4a\")}
     config)"
   [params config]
-  (http/post! "/v1/audio/transcriptions"
-              {:multipart params} config))
+  (http/post! "/v1/audio/transcriptions" {:multipart params} config nil))
 
 (defn audio-translation
   "Translates audio based on the given parameters.
@@ -56,8 +70,7 @@
      :file  (io/file \"audio.m4a\")}
     config)"
   [params config]
-  (http/post! "/v1/audio/translations"
-              {:multipart params} config))
+  (http/post! "/v1/audio/translations" {:multipart params} config nil))
 
 ; chat
 
@@ -76,9 +89,7 @@
      :messages [{:role \"user\" :content \"hello\"}]}
     config)"
   [params config]
-  (http/post! "/v1/chat/completions"
-              (params->http-params params)
-              config))
+  (http/post! "/v1/chat/completions" (params->http-params params) config nil))
 
 ; embeddings
 
@@ -91,8 +102,7 @@
      :input \"hello\"}
     config)"
   [params config]
-  (http/post! "/v1/embeddings"
-              {:body params} config))
+  (http/post! "/v1/embeddings" {:body params} config nil))
 
 ; fine-tuning
 
@@ -121,8 +131,7 @@
      :model         \"model\"}
     config)"
   [params config]
-  (http/post! "/v1/fine_tuning/jobs"
-              {:body params} config))
+  (http/post! "/v1/fine_tuning/jobs" {:body params} config nil))
 
 (defn fine-tuning-job-cancel!
   "Cancels a specific fine-tuning job by its id.
@@ -130,8 +139,7 @@
   Example:
   (openai/fine-tuning-job-cancel! \"ft-id\" config)"
   [id config]
-  (http/post! (str "/v1/fine_tuning/jobs/" id "/cancel")
-              {} config))
+  (http/post! (str "/v1/fine_tuning/jobs/" id "/cancel") {} config nil))
 
 (defn fine-tuning-job-events
   "Retrieves events for a fine-tuning job.
@@ -177,8 +185,7 @@
      :purpose \"fine-tune\"}
     config)"
   [params config]
-  (http/post! "/v1/files"
-              {:multipart params} config))
+  (http/post! "/v1/files" {:multipart params} config nil))
 
 (defn file-delete!
   "Deletes a specific file by its id.
@@ -197,8 +204,7 @@
   Example:
   (openai/image-generation {:prompt \"wall\"} config)"
   [params config]
-  (http/post! "/v1/images/generations"
-              {:body params} config))
+  (http/post! "/v1/images/generations" {:body params} config nil))
 
 (defn image-edit
   "Edits an image based on the given parameters.
@@ -209,8 +215,7 @@
      :prompt \"add brick\"}
      config)"
   [params config]
-  (http/post! "/v1/images/edits"
-              {:multipart params} config))
+  (http/post! "/v1/images/edits" {:multipart params} config nil))
 
 (defn image-variation
   "Generates image variations based on the given parameters.
@@ -218,8 +223,7 @@
   Example:
   (openai/image-variation {:image (io/file \"image.png\")} config)"
   [params config]
-  (http/post! "/v1/images/variations"
-              {:multipart params} config))
+  (http/post! "/v1/images/variations" {:multipart params} config nil))
 
 ; models
 
@@ -255,8 +259,7 @@
   Example:
   (openai/moderation {:input \"some text\"} config)"
   [params config]
-  (http/post! "/v1/moderations"
-              {:body params} config))
+  (http/post! "/v1/moderations" {:body params} config nil))
 
 ; deprecated
 
@@ -266,9 +269,7 @@
   Example:
   (openai/completion {:model \"ada\" :prompt \"hello\"} config)"
   [params config]
-  (http/post! "/v1/completions"
-              (params->http-params params)
-              config))
+  (http/post! "/v1/completions" (params->http-params params) config nil))
 
 (defn ^:deprecated edit
   "Generates an edit based on the given parameters.
@@ -280,8 +281,7 @@
      :input       \"println hello\"}
     config)"
   [params config]
-  (http/post! "/v1/edits"
-              {:body params} config))
+  (http/post! "/v1/edits" {:body params} config nil))
 
 (defn ^:deprecated fine-tunes
   "Retrieves the list of fine-tunes associated with the provided config.
@@ -316,8 +316,7 @@
      :model         \"ada\"}
     config)"
   [params config]
-  (http/post! "/v1/fine-tunes"
-              {:body params} config))
+  (http/post! "/v1/fine-tunes" {:body params} config nil))
 
 (defn ^:deprecated fine-tune-cancel!
   "Cancels a specific fine-tune by its id.
@@ -325,8 +324,7 @@
   Example:
   (openai/fine-tune-cancel! \"ft-id\" config)"
   [id config]
-  (http/post! (str "/v1/fine-tunes/" id "/cancel")
-              {} config))
+  (http/post! (str "/v1/fine-tunes/" id "/cancel") {} config nil))
 
 (defn ^:deprecated fine-tune-delete!
   "Deletes a specific fine-tuned model by its id.
