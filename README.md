@@ -12,17 +12,19 @@ OpenAI in any way.
 ## Usage
 
 This library is available on the [clojars](https://clojars.org) repository. Refer to
-the link in the image below for instructions on how to add it as a dependency to a
-Clojure project.
+the link in the Clojars badge below for instructions on how to add it as a dependency 
+to a Clojure project.
 
 [![Clojars Project](https://img.shields.io/clojars/v/me.pmatiello/openai-api.svg)](https://clojars.org/me.pmatiello/openai-api)
+[![cljdoc badge](https://cljdoc.org/badge/me.pmatiello/openai-api)](https://cljdoc.org/d/me.pmatiello/openai-api)
 
 The functions for interacting with the OpenAI API are located in the 
-`me.pmatiello.openai-api.api` namespace.
+`me.pmatiello.openai-api.api` namespace. Documentation for these functions is available
+in their docstrings.
 
 Refer to the official
 [OpenAI API reference](https://platform.openai.com/docs/api-reference) for details
-about the parameters required for these functions.
+about the parameters required for these functions and for their output format.
 
 Calls to the OpenAI API require a `config` parameter, which can be produced 
 using the `me.pmatiello.openai-api.api/config` function. A valid OpenAI API key
