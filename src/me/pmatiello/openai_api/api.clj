@@ -19,13 +19,15 @@
   "Creates a config map for accessing the API.
 
   The parameters are a map with the following keys:
-  :api-key (required), :base-url and :org-id.
+  `:api-key` (required), `:base-url` and `:org-id` (optional).
 
-  An :http-opts entry is also accepted as a map with the following keys:
-  :connection-timeout and :socket-timeout (both in msec).
+  An `:http-opts` entry is also accepted as a map with the following keys:
+  `:connection-timeout` and `:socket-timeout` (both in msec).
 
   Example:
-  (openai/config :api-key api-key)"
+  ```
+  (openai/config :api-key api-key)
+  ```"
   [& {:as params}]
   (merge {:base-url "https://api.openai.com"} params))
 
@@ -41,11 +43,13 @@
   Returns an input stream with the generated audio content.
 
   Example:
+  ```
   (openai/audio-speach
     {:model \"tts-1\"
      :input \"hello world!\"
      :voice \"nova\"}
-    config)"
+    config)
+  ```"
   [params config]
   (http/post! "/v1/audio/speech"
               {:body params :http-opts {:as :stream}} config {:parse? false}))
@@ -54,10 +58,12 @@
   "Transcribes audio based on the given parameters.
 
   Example:
+  ```
   (openai/audio-transcription
     {:model \"whisper-1\"
      :file  (io/file \"audio.m4a\")}
-    config)"
+    config)
+  ```"
   [params config]
   (http/post! "/v1/audio/transcriptions" {:multipart params} config nil))
 
@@ -65,10 +71,12 @@
   "Translates audio based on the given parameters.
 
   Example:
+  ```
   (openai/audio-translation
     {:model \"whisper-1\"
      :file  (io/file \"audio.m4a\")}
-    config)"
+    config)
+  ```"
   [params config]
   (http/post! "/v1/audio/translations" {:multipart params} config nil))
 
@@ -83,11 +91,16 @@
 (defn chat
   "Generates a chat completion based on the given parameters.
 
+  Produces a streaming response when `:stream true` in present in the params map. In
+  this case, the output will be a lazy sequence containing the streaming events.
+
   Example:
+  ```
   (openai/chat
     {:model    \"gpt-3.5-turbo\"
      :messages [{:role \"user\" :content \"hello\"}]}
-    config)"
+    config)
+  ```"
   [params config]
   (http/post! "/v1/chat/completions" (params->http-params params) config nil))
 
@@ -97,10 +110,12 @@
   "Generates an embedding based on the given parameters.
 
   Example:
+  ```
   (openai/embedding
     {:model \"text-embedding-ada-002\"
      :input \"hello\"}
-    config)"
+    config)
+  ```"
   [params config]
   (http/post! "/v1/embeddings" {:body params} config nil))
 
@@ -110,7 +125,9 @@
   "List fine-tuning jobs.
 
   Example:
-  (openai/fine-tuning-jobs {} config)"
+  ```
+  (openai/fine-tuning-jobs {} config)
+  ```"
   [params config]
   (http/get! "/v1/fine_tuning/jobs" params config nil))
 
@@ -118,7 +135,9 @@
   "Retrieves the details of a specific fine-tuning by its id.
 
   Example:
-  (openai/fine-tuning-job \"ft-id\" config)"
+  ```
+  (openai/fine-tuning-job \"ft-id\" config)
+  ```"
   [id config]
   (http/get! (str "/v1/fine_tuning/jobs/" (name id)) nil config nil))
 
@@ -126,10 +145,12 @@
   "Creates a new fine-tuning job with the provided parameters.
 
   Example:
+  ```
   (openai/fine-tuning-job-create!
     {:training-file \"file-id\"
      :model         \"model\"}
-    config)"
+    config)
+  ```"
   [params config]
   (http/post! "/v1/fine_tuning/jobs" {:body params} config nil))
 
@@ -137,7 +158,9 @@
   "Cancels a specific fine-tuning job by its id.
 
   Example:
-  (openai/fine-tuning-job-cancel! \"ft-id\" config)"
+  ```
+  (openai/fine-tuning-job-cancel! \"ft-id\" config)
+  ```"
   [id config]
   (http/post! (str "/v1/fine_tuning/jobs/" id "/cancel") {} config nil))
 
@@ -145,7 +168,9 @@
   "Retrieves events for a fine-tuning job.
 
   Example:
-  (fine-tuning-job-events \"td-id\" nil config)"
+  ```
+  (fine-tuning-job-events \"td-id\" nil config)
+  ```"
   [id params config]
   (http/get! (str "/v1/fine_tuning/jobs/" (name id) "/events")
              params config nil))
@@ -156,7 +181,9 @@
   "Retrieves the list of files associated with the provided config.
 
   Example:
-  (openai/files config)"
+  ```
+  (openai/files config)
+  ```"
   [config]
   (http/get! "/v1/files" nil config nil))
 
@@ -164,7 +191,9 @@
   "Retrieves the details of a specific file by its id.
 
   Example:
-  (openai/file \"file-id\" config)"
+  ```
+  (openai/file \"file-id\" config)
+  ```"
   [id config]
   (http/get! (str "/v1/files/" id) nil config nil))
 
@@ -172,7 +201,9 @@
   "Retrieves the content of a specific file by its id.
 
   Example:
-  (openai/file-content \"file-id\" config)"
+  ```
+  (openai/file-content \"file-id\" config)
+  ```"
   [id config]
   (http/get! (str "/v1/files/" id "/content") nil config {:parse? false}))
 
@@ -180,10 +211,12 @@
   "Uploads a file with the provided parameters.
 
   Example:
+  ```
   (openai/file-upload!
     {:file    (io/file \"file.txt\")
      :purpose \"fine-tune\"}
-    config)"
+    config)
+  ```"
   [params config]
   (http/post! "/v1/files" {:multipart params} config nil))
 
@@ -191,10 +224,11 @@
   "Deletes a specific file by its id.
 
   Example:
-  (openai/file-delete! \"file-id\" config)"
+  ```
+  (openai/file-delete! \"file-id\" config)
+  ```"
   [id config]
-  (http/delete! (str "/v1/files/" id)
-                config))
+  (http/delete! (str "/v1/files/" id) config))
 
 ; images
 
@@ -202,7 +236,9 @@
   "Generates an image based on the given parameters.
 
   Example:
-  (openai/image-generation {:prompt \"wall\"} config)"
+  ```
+  (openai/image-generation {:prompt \"wall\"} config)
+  ```"
   [params config]
   (http/post! "/v1/images/generations" {:body params} config nil))
 
@@ -210,10 +246,12 @@
   "Edits an image based on the given parameters.
 
   Example:
+  ```
   (openai/image-edit
     {:image  (io/file \"wall.png\")
      :prompt \"add brick\"}
-     config)"
+     config)
+  ```"
   [params config]
   (http/post! "/v1/images/edits" {:multipart params} config nil))
 
@@ -221,7 +259,9 @@
   "Generates image variations based on the given parameters.
 
   Example:
-  (openai/image-variation {:image (io/file \"image.png\")} config)"
+  ```
+  (openai/image-variation {:image (io/file \"image.png\")} config)
+  ```"
   [params config]
   (http/post! "/v1/images/variations" {:multipart params} config nil))
 
@@ -231,7 +271,9 @@
   "Retrieves the list of available models.
 
   Example:
-  (openai/models config)"
+  ```
+  (openai/models config)
+  ```"
   [config]
   (http/get! "/v1/models" nil config nil))
 
@@ -239,7 +281,9 @@
   "Retrieves the details of a specific model by its id.
 
   Example:
-  (openai/model \"gpt-3.5-turbo\" config)"
+  ```
+  (openai/model \"gpt-3.5-turbo\" config)
+  ```"
   [id config]
   (http/get! (str "/v1/models/" (name id)) nil config nil))
 
@@ -247,7 +291,9 @@
   "Deletes a specific fine-tuned model by its id.
 
   Example:
-  (openai/model-delete! \"model-id\" config)"
+  ```
+  (openai/model-delete! \"model-id\" config)
+  ```"
   [model-id config]
   (http/delete! (str "/v1/models/" model-id) config))
 
@@ -257,7 +303,9 @@
   "Performs content moderation with the provided parameters.
 
   Example:
-  (openai/moderation {:input \"some text\"} config)"
+  ```
+  (openai/moderation {:input \"some text\"} config)
+  ```"
   [params config]
   (http/post! "/v1/moderations" {:body params} config nil))
 
@@ -267,7 +315,9 @@
   "Generates a completion based on the given parameters.
 
   Example:
-  (openai/completion {:model \"ada\" :prompt \"hello\"} config)"
+  ```
+  (openai/completion {:model \"ada\" :prompt \"hello\"} config)
+  ```"
   [params config]
   (http/post! "/v1/completions" (params->http-params params) config nil))
 
@@ -275,11 +325,13 @@
   "Generates an edit based on the given parameters.
 
   Example:
+  ```
   (openai/edit
     {:model       \"code-davinci-edit-001\"
      :instruction \"fix\"
      :input       \"println hello\"}
-    config)"
+    config)
+  ```"
   [params config]
   (http/post! "/v1/edits" {:body params} config nil))
 
@@ -287,7 +339,9 @@
   "Retrieves the list of fine-tunes associated with the provided config.
 
   Example:
-  (openai/fine-tunes config)"
+  ```
+  (openai/fine-tunes config)
+  ```"
   [config]
   (http/get! "/v1/fine-tunes" nil config nil))
 
@@ -295,7 +349,9 @@
   "Retrieves the details of a specific fine-tune by its id.
 
   Example:
-  (openai/fine-tune \"ft-id\" config)"
+  ```
+  (openai/fine-tune \"ft-id\" config)
+  ```"
   [id config]
   (http/get! (str "/v1/fine-tunes/" (name id)) nil config nil))
 
@@ -303,7 +359,9 @@
   "Retrieves the list of events for a specific fine-tune by its id.
 
   Example:
-  (openai/fine-tune-events \"ft-id\" config)"
+  ```
+  (openai/fine-tune-events \"ft-id\" config)
+  ```"
   [id config]
   (http/get! (str "/v1/fine-tunes/" id "/events") nil config nil))
 
@@ -311,10 +369,12 @@
   "Creates a new fine-tune with the provided parameters.
 
   Example:
+  ```
   (openai/fine-tune-create!
     {:training-file \"file-id\"
      :model         \"ada\"}
-    config)"
+    config)
+  ```"
   [params config]
   (http/post! "/v1/fine-tunes" {:body params} config nil))
 
@@ -322,7 +382,9 @@
   "Cancels a specific fine-tune by its id.
 
   Example:
-  (openai/fine-tune-cancel! \"ft-id\" config)"
+  ```
+  (openai/fine-tune-cancel! \"ft-id\" config)
+  ```"
   [id config]
   (http/post! (str "/v1/fine-tunes/" id "/cancel") {} config nil))
 
@@ -330,6 +392,8 @@
   "Deletes a specific fine-tuned model by its id.
 
   Example:
-  (openai/fine-tune-delete! \"model-id\" config)"
+  ```
+  (openai/fine-tune-delete! \"model-id\" config)
+  ```"
   [model-id config]
   (http/delete! (str "/v1/models/" model-id) config))
