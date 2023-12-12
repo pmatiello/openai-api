@@ -30,20 +30,46 @@ Calls to the OpenAI API require a `config` parameter, which can be produced
 using the `me.pmatiello.openai-api.api/config` function. A valid OpenAI API key
 is required as an argument.
 
-### Example
+## Tutorial
 
-The code below requests a chat completion from the OpenAI API.
+As mentioned above, the public interface for this library is present at the
+`me.pmatiello.openai-api.api` namespace.
 
 ```clj
 (require '[me.pmatiello.openai-api.api :as openai])
+```
 
+The following code produces the configuration value required by all API calls. A valid
+API key must be passed as the value after the `:api-key` keyword.
+
+```clj
 (def config
   (openai/config :api-key api-key))
+```
 
-(openai/chat {:model    "gpt-3.5-turbo"
-              :messages [{:role    "user"
-                          :content "Fix: (println \"hello"}]}
-             config)
+Once the `config` value is ready, it is possible to execute API calls. For instance, 
+the call below retrieves the list of all available models.
+
+```clj
+(openai/models config)
+```
+
+And the next one retrieves the details of a specific model.
+
+```clj
+(openai/model "gpt-3.5-turbo" config)
+```
+
+The following call requests a chat completion. In this particular case, the model is
+prompted to produce a "hello world" program written in Clojure.
+
+```clj
+(openai/chat
+  {:model    "gpt-3.5-turbo"
+   :messages [{:role "user" :content "Hello!"}
+              {:role "assistant" :content "Hello! How can I assist you today?"}
+              {:role "user" :content "Write a hello world program in Clojure."}]}
+  config)
 ```
 
 More examples are available in the [test/repl.clj](test/repl.clj) file.
