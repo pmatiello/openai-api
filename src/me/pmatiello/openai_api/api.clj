@@ -1,8 +1,9 @@
 (ns
   ^{:doc "This namespace provides a wrapper around the OpenAI API, offering various
           functions for interacting with the API's capabilities. These include text
-          generation, image generation and editing, embeddings, audio transcription
-          and translation, file management, fine-tuning, and content moderation.
+          generation, image generation and editing, embeddings, audio generation,
+          transcription and translation, file management, fine-tuning, and content
+          moderation.
 
           Refer to the official OpenAI documentation for details about the parameters
           required for these functions.

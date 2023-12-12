@@ -3,7 +3,7 @@
 This library provides a pure-Clojure wrapper around the
 [OpenAI API](https://platform.openai.com), offering various functions for interacting
 with the API's capabilities. These include text generation, image generation and
-editing, embeddings, audio transcription and translation, file management,
+editing, embeddings, audio generation, transcription and translation, file management,
 fine-tuning, and content moderation.
 
 **Notice:** This is not an official OpenAI project nor is it affiliated with
