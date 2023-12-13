@@ -3,7 +3,7 @@
 Notable changes to this project are documented in this file.
 
 ## v0.5.0
-**Released at:** UNRELEASED
+**Released at:** 2023-06-13
 - Adds API calls for the new fine-tuning API.
 - Adds API call for audio generation. 
 - Deprecates calls to completion, edits and fine-tunes APIs, as these APIs have been
