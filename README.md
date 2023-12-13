@@ -102,7 +102,8 @@ To clean a previous build, run:
 
 ### Releasing
 
-Before releasing, update the library version in the [build.clj](./build.clj) file.
+Before releasing, update the library version in the [build.clj](./build.clj) file and
+include a entry for the release in the [changelog](./CHANGELOG.md).
 
 Make a commit and generate a new tag:
 
